@@ -18,6 +18,7 @@ for (const k of ['lab', 'home', 'research', 'software', 'positions']) object(d[k
 for (const [section, fields] of Object.entries({ lab: ['name','full_name','group','institution','department','location','email','logo','group_photo','group_photo_caption','description'], home: ['eyebrow','title','welcome','introduction','about_title','about'], research: ['title','introduction','context'], software: ['title','introduction'], positions: ['title','subtitle','introduction','details','contact_label'] })) for (const f of fields) text(d[section][f], `${section}.${f}`);
 if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.lab.email)) fail('lab.email', 'provide an email address');
 for (const k of ['site_url','github','original_site']) url(d.lab[k], `lab.${k}`);
+if (d.lab.google_site_verification && (typeof d.lab.google_site_verification!=='string'||!(/^[A-Za-z0-9_-]+$/).test(d.lab.google_site_verification))) fail('lab.google_site_verification','use only the token from Google, without the surrounding HTML tag');
 for (const path of ['people','publications','research.areas','software.projects','positions.backgrounds']) list(path.split('.').reduce((v,k) => v?.[k], d), path);
 for (const [collection, fields] of [[d.people,['id','name','role','image','bio']], [d.publications,['id','title','authors','venue','type','url']], [d.research.areas,['id','number','title']], [d.software.projects,['name','category','description','url']]]) {
   const seen = new Set();

@@ -155,6 +155,12 @@ linked in the structured metadata. Search results and error pages are marked
 `noindex`; the sitemap contains the public content pages. After publishing, verify
 the site in Google Search Console and submit `/sitemap.xml` there.
 
+Search Console ownership uses the public token in `lab.google_site_verification`.
+The build places it in the homepage's HTML head. Keep the token after verification;
+Google checks it again periodically. Changing content, adding papers, and rebuilding
+the sitemap do not require submitting it again for every edit. The generated
+`/sitemap.xml` is also listed in `/robots.txt`.
+
 The palette check validates text contrast and focus/control boundary contrast in
 both themes. It complements the HTML/link checks and manual keyboard and narrow
 viewport review; it is not a complete accessibility audit. Preserve readable body

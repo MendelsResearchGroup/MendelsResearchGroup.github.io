@@ -12,6 +12,8 @@ lab:
   location: Haifa, Israel
   email: danmendels@technion.ac.il
   site_url: https://mendelsresearchgroup.github.io
+  # Public Search Console verification token. Keep this to retain ownership verification.
+  google_site_verification: u1L_HSkhfPU1T6R3NE9awysGe9m8nYLEwv-0-iHjRXc
   github: https://github.com/MendelsResearchGroup
   original_site: https://mendelsgroup.net.technion.ac.il/
   logo: /assets/brand/logo-light.png

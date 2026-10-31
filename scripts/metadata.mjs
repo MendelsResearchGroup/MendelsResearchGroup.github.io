@@ -48,6 +48,7 @@ export function pageMetadata({data:d,base,path,title,description,entity}) {
   }
   graph.push(webPage);
   const socialImage=paper?.overview?base+paper.overview.figure.image:base+d.lab.logo;
+  const verification=path==='/'&&d.lab.google_site_verification?tag('google-site-verification',d.lab.google_site_verification):'';
   const head=`<title>${escape(documentTitle)}</title>${tag('description',description)}<link rel="canonical" href="${escape(canonical)}">${indexable?'':tag('robots','noindex, follow')}${tag('theme-color','#123a5b')}<meta property="og:type" content="${paper?'article':'website'}"><meta property="og:site_name" content="${escape(d.lab.name)}"><meta property="og:title" content="${escape(documentTitle)}"><meta property="og:description" content="${escape(description)}"><meta property="og:url" content="${escape(canonical)}"><meta property="og:image" content="${escape(socialImage)}"><meta property="og:image:alt" content="${escape(paper?.overview?.figure.alt||d.lab.full_name)}">${tag('twitter:card','summary_large_image')}${citation}`;
-  return {head,structured:{'@context':'https://schema.org','@graph':graph},indexable};
+  return {head:head+verification,structured:{'@context':'https://schema.org','@graph':graph},indexable};
 }
