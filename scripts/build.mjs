@@ -111,6 +111,3 @@ await writeFile(resolve(out,'.nojekyll'),'');
 await page('/404/','Page not found','Find your way back to the CME Lab website.',`${intro('404','Page not found','The page you are looking for may have moved.')}<div class="wrap error-actions">${link('/','Return home','button')}${link('/search/','Search the site')}</div>`);
 await cp(resolve(out,'404/index.html'),resolve(out,'404.html'));
 console.log(`Built ${urls.length+1} pages, ${d.people.length} people, and ${publications.length} publications from content/lab.yml.`);
-
-
-
