@@ -14,8 +14,9 @@ lab:
   site_url: https://mendelsresearchgroup.github.io
   github: https://github.com/MendelsResearchGroup
   original_site: https://mendelsgroup.net.technion.ac.il/
-  logo: /assets/logo.png
-  group_photo: /assets/lab-group.jpg
+  logo: /assets/brand/logo-light.png
+  logo_dark: /assets/brand/logo-dark.png
+  group_photo: /assets/people/group.jpg
   group_photo_caption: The CME group at the Technion · 2024
   description: We focus on developing and applying computational tools for understanding and designing
     molecular systems and materials. We are driven by intellectual curiosity and a desire to
@@ -71,13 +72,13 @@ research:
     partners. Projects of current interest lie within the fields of drug and protein design, smart
     structural materials, polymer design, and next generation solar cells and batteries.
 
-# PEOPLE: image is a file in public/assets/. Website and email are optional.
+# PEOPLE: put portraits in public/assets/people/. Website and email are optional.
 # To remove a member from the site, remove their complete block.
 people:
   - id: dan-mendels
     name: Dr. Dan Mendels
     role: Principal Investigator
-    image: /assets/dan.jpg
+    image: /assets/people/dan-mendels.jpg
     email: danmendels@technion.ac.il
     bio: >-
       Dr. Dan Mendels is an assistant professor at the Wolfson Department of Chemical Engineering in
@@ -88,17 +89,19 @@ people:
       of enhanced sampling methodologies. Dan holds a PhD in Electrical Engineering from the
       Technion and an MSc and BSc in Physics with honors from the Hebrew University of Jerusalem,
       Israel.
+    orcid: https://orcid.org/0000-0002-2408-3133
   - id: sergey-shteingoltz
     name: Sergey Shteingoltz
     role: PhD Student
-    image: /assets/sergey.jpg
+    image: /assets/people/sergey-shteingoltz.jpg
     bio: >-
       Sergey joined the CME in March 2023. He earned his BSc and MSc from Kazan Federal University,
       Butlerov's Chemistry Institute (2014-2019).
+    orcid: https://orcid.org/0000-0001-6265-5684
   - id: salman-salman
     name: Salman Salman
     role: PhD Student
-    image: /assets/salman.jpeg
+    image: /assets/people/salman-salman.jpeg
     bio: >-
       Salman joined the group in October 2023. He has a BSc and MSc with honors in Computer Science
       from Leipzig University and the University of Strathclyde, respectively. His primary focus was
@@ -109,14 +112,14 @@ people:
   - id: muralika-medaparambath
     name: Muralika Medaparambath
     role: MSc Student
-    image: /assets/muralika.jpg
+    image: /assets/people/muralika-medaparambath.jpg
     bio: >-
       I’m a masters student in Applied Mathematics at the Technion. I'm interested in using
       computational and statistical methods to study protein folding and dynamics.
   - id: alex-zhilkin
     name: Alex Zhilkin
     role: PhD Student
-    image: /assets/alex.jpg
+    image: /assets/people/alex-zhilkin.jpg
     website: https://alex-zhilkin.github.io/
     bio: >-
       I’m a PhD student with an MSc in Theoretical and Computational Methods from the University of
@@ -130,7 +133,7 @@ people:
   - id: eli-zick
     name: Eli Zick
     role: PhD Student
-    image: /assets/eli.png
+    image: /assets/people/eli-zick.png
     bio: >-
       Eli joined the CME Group in April 2025. He has an MSc in Physics from Ural Federal University
       where his primary focus was on quantum chemical calculations and DFT and their applications in
@@ -156,48 +159,101 @@ publications:
     type: Preprint
     url: https://arxiv.org/abs/2607.06421
     code: https://github.com/MendelsResearchGroup/Gradient-Based-Free-Energy-Surface-Optimization
-    summary:
-      headline: Designing the landscape, not just a structure.
-      question: Can we choose a target free-energy landscape and work backward to the system parameters
-        that produce it?
-      approach: >-
-        GB-FESO uses a trained conditional diffusion model as a differentiable representation of an
-        ensemble. The model is frozen while the system’s conditioning variables are optimized,
-        comparing generated distributions with a target through a kernel-density-based loss.
-      finding: >-
-        Tests recovered target Gaussian distributions, including targets beyond the training domain.
-        In a four-particle Lennard-Jones toy peptide, optimized interaction parameters reproduced
-        target landscapes in most tested cases, using either internal coordinates or collective
-        variables.
-      significance: >-
-        This is a proof of concept for ensemble-level inverse design. The demonstrations use
-        simplified systems; applying the framework to larger molecular systems remains a next step.
-      source: https://arxiv.org/abs/2607.06421
+    overview:
+      abstract: Free-energy surfaces govern the populations of metastable states and the barriers that
+        control transitions between them, making their direct optimization a central challenge in
+        molecular and materials design. In this work, we introduce Gradient-Based Free Energy
+        Surface Optimization (GB-FESO), an inverse design framework that uses a trained conditional
+        diffusion model as a differentiable surrogate for the ensemble distribution. After training,
+        the diffusion model is frozen, and the conditioning variables defining the system are
+        optimized so that the generated ensemble reproduces a prescribed target free-energy surface.
+        The optimization is carried out by backpropagating a distribution-level loss, based on
+        kernel density estimates of the Kullback–Leibler divergence, through a deterministic
+        diffusion sampling trajectory. We first validate GB-FESO on one-dimensional Gaussian
+        ensembles, demonstrating that both continuous and relaxed discrete conditioning variables
+        can be optimized to recover target distributions, including those outside the training
+        domain. We then apply the method to a four-particle Lennard–Jones toy peptide exhibiting
+        multiple metastable conformational states. In this more physically motivated setting,
+        GB-FESO successfully optimizes the interaction parameters to reproduce target free-energy
+        landscapes in the majority of test cases, with optimization performed either in the full
+        internal-coordinate space or in a reduced collective-variable representation. These results
+        establish GB-FESO as a promising first step toward an ensemble-level inverse design
+        framework for molecular systems with prescribed thermodynamic and kinetic behavior.
+      abstract_source: https://arxiv.org/html/2607.06421v1
+      abstract_version: arXiv preprint
+      figure:
+        image: /assets/papers/diffusion-2026.png
+        number: Figure 1
+        caption: "Figure 1: Schematic representation of the GB-FESO workflow. The diffusion model generates
+          a large batch of samples with a given condition vector. The optimizer calculates the KL
+          divergence loss between the generated and target ensembles and backpropagates gradients
+          back to the condition through the entire sampler path."
+        source: https://arxiv.org/html/2607.06421v1#S2.F1
+        license: CC BY 4.0
+        license_url: https://creativecommons.org/licenses/by/4.0/
+        credit: © 2026 the authors. Reproduced without alteration from the arXiv preprint.
+        width: 1482
+        height: 718
+        alt: "Figure 1: Schematic representation of the GB-FESO workflow. The diffusion model generates a
+          large batch of samples with a given condition vector. The optimizer calculates the KL
+          divergence loss between the generated and target ensembles and backpropagates gradients
+          back to the condition through the entire sampler path."
+    published: 2026-07-07
   - id: gnn-2026
-    title: Enabling Structure-Only Initialization and Out-of-Distribution Generalization in GNN-based
+    title: Enabling Structure-Only Initialization and Out-of-Distribution Generalization in GNN-Based
       Molecular Dynamics Simulators
     authors: Sergey A. Shteingolts, Salman N. Salman, Dan Mendels
     year: 2026
-    venue: arXiv
-    type: Preprint
-    url: https://arxiv.org/abs/2605.09495
-    summary:
-      headline: Starting a learned simulator from structure alone.
-      question: How can a graph neural network simulate a new material from one static configuration,
-        including structures outside its training distribution?
-      approach: >-
-        The study develops two complementary initialization strategies, physics-based optimization
-        during inference, and a differentiable GNN barostat to track pressure and changing system
-        dimensions.
-      finding: >-
-        On compressed disordered elastic networks, the combined methods improve simulation stability
-        and generalization across geometries, Poisson ratios, and microscopic responses, including
-        more complex dynamical regimes than those represented in training.
-      significance: >-
-        Structure-only initialization and physically constrained rollouts make learned simulators
-        more useful for inverse design. The evidence here concerns elastic-network benchmarks rather
-        than unrestricted molecular systems.
-      source: https://arxiv.org/abs/2605.09495
+    venue: Journal of Chemical Theory and Computation
+    type: Article
+    url: https://doi.org/10.1021/acs.jctc.6c01145
+    overview:
+      abstract: Machine learning-based simulators offer the potential to model the dynamics of complex
+        systems significantly more efficiently than classical approaches, while retaining
+        differentiability, a key property for materials design and optimization. In recent years,
+        graph neural network (GNN)-based simulators have shown strong performance across a range of
+        physical domains, including molecular dynamics. However, their reliance on temporal context,
+        i.e., sequences of previous states, for accurate prediction can limit their applicability in
+        inverse design settings, where simulations must be initialized from a single structural
+        configuration. Moreover, inverse design inherently requires robust out-of-distribution (OOD)
+        generalization, as candidate structures typically lie outside the training domain. Here, we
+        address both challenges by introducing two complementary strategies that enable stable and
+        accurate structure-only initialization of GNN-based simulations for previously unseen
+        systems. To explicitly target OOD generalization, we further propose an inference-time
+        physics-based optimization framework that constrains model predictions to remain physically
+        consistent during rollout. In addition, we introduce a differentiable, GNN-based barostat
+        that enables accurate tracking of system dimensions and pressure, which is critical for
+        capturing macroscopic responses and supporting generalization in extrapolative regimes. We
+        evaluate these approaches in the context of uniaxial compression of two-dimensional
+        disordered elastic networks spanning a broad range of geometries, Poisson ratios, and
+        microscopic behaviors. We find that, in combination, these methods substantially improve
+        rollout stability and enable reliable OOD generalization, including to regimes exhibiting
+        qualitatively distinct and more complex dynamics than those represented in the training
+        data. These results demonstrate that, when appropriately initialized and constrained,
+        GNN-based simulators can serve as efficient and generalizable tools for materials discovery
+        and structural optimization, marking a step toward their broader use in materials,
+        molecular, and dynamical system design and engineering.
+      abstract_source: https://arxiv.org/html/2605.09495v1
+      abstract_version: arXiv preprint
+      figure:
+        image: /assets/papers/gnn-2026.png
+        number: Figure 2
+        caption: "Figure 2: Schematic overview of the two proposed approaches for addressing the SOI problem
+          of GNN-based simulators. The first approach (top) employs a custom differentiable MD
+          engine to generate initial dynamics, while the second approach (bottom) uses a cascade of
+          specialized GNN simulators tailored to the initial timesteps."
+        source: https://arxiv.org/html/2605.09495v1#S2.F2
+        license: CC BY-NC-ND 4.0
+        license_url: https://creativecommons.org/licenses/by-nc-nd/4.0/
+        credit: © 2026 the authors. Reproduced without alteration from the arXiv preprint.
+        width: 2100
+        height: 999
+        alt: "Figure 2: Schematic overview of the two proposed approaches for addressing the SOI problem of
+          GNN-based simulators. The first approach (top) employs a custom differentiable MD engine
+          to generate initial dynamics, while the second approach (bottom) uses a cascade of
+          specialized GNN simulators tailored to the initial timesteps."
+    published: 2026-10-27
+    preprint: https://arxiv.org/abs/2605.09495
   - id: peptide-surface-2026
     title: Collective Variable-Guided Engineering of the Free-Energy Surface of a Small Peptide
     authors: Muralika Medaparambath, Alexander Zhilkin, Dan Mendels
@@ -206,23 +262,42 @@ publications:
     type: Article
     url: https://pubs.acs.org/doi/10.1021/acs.jcim.6c00674
     code: https://github.com/MendelsResearchGroup/CV-guided-FES-engineering
-    summary:
-      headline: Reading mutation effects from local molecular motion.
-      question: Can short simulations help identify how a peptide mutation changes the balance between
-        folded and unfolded states?
-      approach: >-
-        The work applies CV-FEST and harmonic linear discriminant analysis to short, unbiased
-        simulations of the ten-residue peptide CLN025 and a library of single-point mutants.
-        Predictions are compared with replica-exchange molecular dynamics benchmarks.
-      finding: >-
-        A collective variable learned from the wild type identifies positions sensitive to mutation.
-        Changes in the leading HLDA eigenvalue across mutants correlate with shifts in melting
-        temperature, connecting local fluctuations to thermodynamic stability.
-      significance: >-
-        The results support an economical way to guide peptide mutation studies when data are
-        limited. The correlations provide guidance, with validation on a small peptide rather than a
-        universal predictor of protein stability.
-      source: https://pmc.ncbi.nlm.nih.gov/articles/PMC13418176/
+    overview:
+      abstract: Engineering the free-energy surfaces (FES) of proteins and peptides is central to
+        controlling conformational ensembles and their responses to perturbations. However,
+        predicting how chemical modifications such as point mutations reshape the FES and shift
+        conformational equilibria remains challenging, particularly in data-scarce settings.
+        Building on the Collective Variables for Free-Energy Surface Tailoring (CV-FEST) framework,
+        we develop a computational approach that leverages short, unbiased molecular dynamics
+        trajectories to guide mutation analysis. Using the ten-residue β-hairpin CLN025 and a
+        systematic library of its single-point mutants, we apply Harmonic Linear Discriminant
+        Analysis (HLDA) to extract collective variables from the conformational data. We find that
+        the HLDA eigenvector learned solely from short wild-type trajectories provides residue-level
+        insights into the propensity of mutations at specific positions to thermodynamically
+        stabilize or destabilize the folded state. Extending this analysis, we show that shifts in
+        the leading HLDA eigenvalue across mutants, a measure of changes in separability between the
+        conformational ensembles along the HLDA coordinate, correlate strongly with mutation-induced
+        changes in the free-energy difference between states, as reflected in melting temperatures.
+        Benchmarked against Replica-Exchange Molecular Dynamics simulations, these findings suggest
+        a promising and computationally affordable route toward guiding the engineering of
+        biomolecular free-energy landscapes.
+      abstract_source: https://pmc.ncbi.nlm.nih.gov/articles/PMC13418176/
+      abstract_version: Published article
+      figure:
+        image: /assets/papers/peptide-surface-2026.jpg
+        number: Figure 1
+        caption: (a) Structural model of CLN025 with inter-residue distance descriptors (black lines). (b)
+          Absolute HLDA eigenvector weights for each distance descriptor.
+        source: https://pmc.ncbi.nlm.nih.gov/articles/PMC13418176/#fig1
+        license: CC BY 4.0
+        license_url: https://creativecommons.org/licenses/by/4.0/
+        credit: © 2026 the authors. Published by the American Chemical Society. Reproduced without
+          alteration.
+        width: 627
+        height: 378
+        alt: (a) Structural model of CLN025 with inter-residue distance descriptors (black lines). (b)
+          Absolute HLDA eigenvector weights for each distance descriptor.
+    published: 2026-07-10
   - id: peptide-kinetics-2026
     title: Guiding Peptide Kinetics via Collective-Variable Tuning of Free-Energy Barriers
     authors: Alexander Zhilkin, Muralika Medaparambath, Dan Mendels
@@ -231,24 +306,43 @@ publications:
     type: Article
     url: https://pubs.acs.org/doi/10.1021/acs.jctc.6c00418
     code: https://github.com/MendelsResearchGroup/guiding-peptide-kinetics
-    summary:
-      headline: Small fluctuations, clues to rare transitions.
-      question: Can motion within a peptide’s folded and unfolded states reveal which mutations change its
-        unfolding rate?
-      approach: >-
-        Using Chignolin as a test system, the study constructs HLDA collective variables from short
-        simulations confined to metastable basins. Wild-type residue weights and mutant-specific
-        eigenvalues are compared with unfolding times estimated using short-time infrequent
-        metadynamics.
-      finding: >-
-        Wild-type residue scores identify positions where mutations tend to alter unfolding
-        kinetics. Across point mutants, the leading HLDA eigenvalue is significantly associated with
-        transition times. Learning the collective variable does not require observing transitions.
-      significance: >-
-        Local sampling can guide the search for mutations that change kinetic behavior. The
-        association is imperfect, and extension to larger peptides and proteins still needs to be
-        demonstrated.
-      source: https://pmc.ncbi.nlm.nih.gov/articles/PMC13173532/
+    overview:
+      abstract: While recent advances in AI have transformed protein structure prediction, protein
+        function is also strongly influenced by the thermodynamic and kinetic features encoded in
+        its underlying free-energy surface. Here, we propose a framework to rationally reshape this
+        landscape in order to control conformational transition rates, built on the Collective
+        Variables for Free Energy Surface Tailoring (CV-FEST) framework, and validate it on point
+        mutations of the miniprotein Chignolin. The framework relies on Harmonic Linear Discriminant
+        Analysis (HLDA)-based collective variables (CVs) constructed from short molecular dynamics
+        trajectories confined to metastable basins, requiring only limited sampling within each
+        basin. Notably, the HLDA CV derived solely from the wild-type system already provides
+        residue-level scores that predict whether mutations at specific positions are likely to
+        accelerate or slow unfolding transitions. Furthermore, we find that the leading HLDA
+        eigenvalue associated with the derived CV, a quantitative measure of the one-dimensional
+        statistical separation between folded and unfolded ensembles, is significantly correlated
+        with transition rates across mutations. Together, these results suggest that kinetic effects
+        of point mutations can be inferred from minimal local sampling, providing a practical route
+        for guiding the engineering of transition rates without exhaustive simulations or large
+        training data sets.
+      abstract_source: https://pmc.ncbi.nlm.nih.gov/articles/PMC13173532/
+      abstract_version: Published article
+      figure:
+        image: /assets/papers/peptide-kinetics-2026.jpg
+        number: Figure 1
+        caption: (a) Illustration of representative backbone-distance descriptors used as input features for
+          HLDA construction. (b) Aggregated per-residue HLDA weights derived from the leading
+          eigenvector of the WT projection using eq 8, shown as normalized values.
+        source: https://pmc.ncbi.nlm.nih.gov/articles/PMC13173532/#fig1
+        license: CC BY 4.0
+        license_url: https://creativecommons.org/licenses/by/4.0/
+        credit: © 2026 the authors. Published by the American Chemical Society. Reproduced without
+          alteration.
+        width: 666
+        height: 346
+        alt: (a) Illustration of representative backbone-distance descriptors used as input features for
+          HLDA construction. (b) Aggregated per-residue HLDA weights derived from the leading
+          eigenvector of the WT projection using eq 8, shown as normalized values.
+    published: 2026-04-20
   - id: networks-2025
     title: "Evaluating the use of a machine learning simulator for structure–property prediction: A case
       study on disordered elastic networks"
@@ -257,23 +351,46 @@ publications:
     venue: The Journal of Chemical Physics
     type: Article
     url: https://pubs.aip.org/aip/jcp/article/163/12/124115/3364390/
-    summary:
-      headline: Learning material properties through dynamics.
-      question: Can a model trained to simulate motion predict material properties it was never explicitly
-        taught?
-      approach: >-
-        A graph neural network learns the dynamics of two-dimensional disordered elastic networks
-        under uniaxial compression from a small number of examples. Its rollouts are used to
-        evaluate emergent mechanical behavior.
-      finding: >-
-        The simulator reproduces the evolution of unseen networks and predicts Poisson’s ratio and
-        its strain dependence without direct property training. It also generalizes across
-        temperatures, strain amplitudes, and Poisson ratios outside the training range.
-      significance: >-
-        Dynamical training can support more data-efficient structure–property prediction. The study
-        establishes this behavior for elastic networks, motivating further work on materials and
-        molecular design.
-      source: https://doi.org/10.1063/5.0282871
+    overview:
+      abstract: Machine learning models often require large datasets and struggle to generalize beyond
+        their training distribution. These limitations pose significant challenges in scientific and
+        engineering contexts, where generating exhaustive datasets is often impractical and the goal
+        is to frequently discover novel solutions outside the training domain. In this work, we
+        explore the use of dynamical data through a graph neural network-based simulator to enable
+        efficient system-to-property learning and out-of-distribution prediction in the context of
+        uniaxial compression of two-dimensional disordered elastic networks. We find that the
+        simulator can learn the underlying physical dynamics from a small number of training
+        examples and accurately reproduce the temporal evolution of unseen networks. Notably, the
+        simulator is able to accurately predict emergent properties such as Poisson’s ratio and its
+        dependence on strain, even though it was not explicitly trained for this task. In addition,
+        it generalizes well across variations in system temperature, strain amplitude, and most
+        significantly, Poisson’s ratios beyond the training range. These findings suggest that using
+        dynamical data to train machine learning models can support more information efficient and
+        generalizable approaches for materials and molecular design, especially in data-scarce
+        settings.
+      abstract_source: https://doi.org/10.1063/5.0282871
+      abstract_version: Published article
+      figure:
+        image: /assets/papers/networks-2025.png
+        number: Figure 1
+        caption: "Left panel: illustration of a two-dimensional disordered elastic network with periodic
+          boundary conditions, where the particles represent point masses and the edges correspond
+          to harmonic bonds. Right panel: architecture of the simulator model used in this work. MPL
+          denotes a message passing layer; layers are applied sequentially to the processor’s
+          input."
+        source: https://doi.org/10.1063/5.0282871
+        license: CC BY-NC 4.0
+        license_url: https://creativecommons.org/licenses/by-nc/4.0/
+        credit: © 2025 the authors. Published by AIP Publishing. Reproduced without alteration.
+        width: 1350
+        height: 549
+        alt: "Left panel: illustration of a two-dimensional disordered elastic network with periodic
+          boundary conditions, where the particles represent point masses and the edges correspond
+          to harmonic bonds. Right panel: architecture of the simulator model used in this work. MPL
+          denotes a message passing layer; layers are applied sequentially to the processor’s
+          input."
+    published: 2025-09-24
+    doi: 10.1063/5.0282871
   - id: networks-2023
     title: Systematic Modification of Functionality in Disordered Elastic Networks Through Free Energy
       Surface Tailoring

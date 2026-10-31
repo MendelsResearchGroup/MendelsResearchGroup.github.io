@@ -30,25 +30,36 @@ Duplicate a block under `publications:` and replace its values:
 ```
 
 Use `Preprint` for a preprint. An optional `code:` URL adds a repository link.
-The list is sorted by year; order within a year follows the file.
+The list is sorted by year, then by optional `published: YYYY-MM-DD` dates.
+For undated papers in the same year, order follows the file.
 
-To create a dedicated summary page, add this inside the same paper block:
+To create a dedicated page with an original abstract and a figure, add this inside
+the same paper block. Upload the figure to `public/assets/papers/` first:
 
 ```yaml
-    summary:
-      headline: A short, accessible headline.
-      question: The question your paper addresses.
-      approach: >-
-        Briefly describe the method and the system studied.
-      finding: >-
-        Explain the main result without overstating the evidence.
-      significance: >-
-        Explain the value of the result and its scope or limitations.
-      source: https://doi.org/your-paper
+    published: 2027-01-15
+    overview:
+      abstract: >-
+        Paste the paper's original abstract here.
+      abstract_source: https://doi.org/your-paper
+      abstract_version: Published article
+      figure:
+        image: /assets/papers/your-paper.png
+        number: Figure 1
+        caption: The original figure caption.
+        alt: A description of the figure for accessibility.
+        width: 1600
+        height: 900
+        source: https://doi.org/your-paper
+        credit: The figure's original attribution.
+        license: CC BY 4.0
+        license_url: https://creativecommons.org/licenses/by/4.0/
 ```
 
-The paper page, summary links, sitemap entry, and site search entry are generated
-automatically. Omit the `summary:` block to keep a paper as a bibliography entry.
+Use the figure's actual dimensions and licence. The paper page, overview links,
+sitemap entry, and site search entry are generated automatically. Omit `overview:`
+to keep a paper as a bibliography entry. An optional `preprint:` URL adds a separate
+preprint link when the main `url:` points to the published article.
 
 ### Add or update a person
 
@@ -58,15 +69,32 @@ Duplicate a block under `people:`:
   - id: first-last
     name: First Last
     role: PhD Student
-    image: /assets/first-last.jpg
+    image: /assets/people/first-last.jpg
     bio: >-
       A short biography and research interests.
 ```
 
-Upload a new portrait into `public/assets/` first. Optional `email:` and `website:`
-fields add contact links. Removing the complete person block removes them from
+Upload a new portrait into `public/assets/people/` first. Optional `email:` and `website:`
+fields add contact links. An optional `orcid:` URL connects a verified researcher
+identity to the structured metadata. Removing the complete person block removes them from
 the directory and deletes their generated profile on the next build. Prefer
 stable IDs so profile and paper links keep working.
+
+### Where images go
+
+```text
+content/lab.yml             All editable text, people, papers, and image paths
+public/assets/people/       Portraits and group.jpg
+public/assets/papers/       Main paper figures, named by publication ID
+public/assets/brand/        logo-light.png and logo-dark.png
+```
+
+Upload the image with GitHub's **Add file → Upload files**, then update its path
+in `content/lab.yml`. Use lowercase filenames with hyphens. The leading `/assets/`
+path maps to `public/assets/` in the repository. Paper image paths belong under
+the paper's `overview.figure.image`; portraits use the person's `image` field.
+`lab.logo` and optional `lab.logo_dark` control the two logo variants. The logo
+switches with the active theme automatically.
 
 ### Other edits
 
@@ -89,6 +117,7 @@ Node.js 24 is used in deployment; Node.js 22 or newer is supported locally.
 npm ci
 npm run build
 node scripts/check.mjs
+node scripts/check-accessibility.mjs
 npm run preview
 ```
 
@@ -96,6 +125,14 @@ Open http://127.0.0.1:4173. Rebuild after changing content or templates.
 Generated files live in `dist/` and are not committed. All public page content is
 rendered into HTML; JavaScript enhances search, filtering, and the mobile menu.
 There is no server, database, account system, or API key to maintain.
+
+The header has a sun/moon icon button with an accessible **Dark mode** label and
+pressed state. It follows the operating-system appearance by default and responds
+immediately to system changes until a visitor toggles it. The visitor's explicit
+light/dark preference is saved only in this browser's `localStorage`, under
+`cme-theme`; no browser permission prompt or sign-in is needed. Clearing site data
+resets the preference to following the system. If storage is unavailable, the button still works for the
+current page. The small initialization script applies the theme before styles render.
 
 ## GitHub Pages setup
 
@@ -112,6 +149,18 @@ URLs, metadata for sharing, structured organization/person/publication data,
 a sitemap, accessible labels, and keyboard focus styles. Search engines can crawl
 the core content without JavaScript. Indexing and search rankings are not guaranteed.
 
+Paper pages include scholarly citation tags, DOI identifiers, original abstracts,
+and figure sharing images. Organization, researcher, and publication records are
+linked in the structured metadata. Search results and error pages are marked
+`noindex`; the sitemap contains the public content pages. After publishing, verify
+the site in Google Search Console and submit `/sitemap.xml` there.
+
+The palette check validates text contrast and focus/control boundary contrast in
+both themes. It complements the HTML/link checks and manual keyboard and narrow
+viewport review; it is not a complete accessibility audit. Preserve readable body
+text, visible keyboard focus, descriptive image alternatives, and reduced-motion
+support when making design changes.
+
 If the primary domain changes, update `lab.site_url` in the YAML file. The canonical
 URLs and sitemap follow that setting. The existing Technion site is linked in the
 footer; domain redirects require access to that site's hosting.
@@ -122,9 +171,11 @@ People, research areas, positions, publication titles, and original photographs
 were migrated from https://mendelsgroup.net.technion.ac.il/ on 31 October 2026.
 The homepage, research introduction, biographies, and positions text preserve the
 original website's wording, with whitespace normalized and contact/profile URLs
-presented as separate links. The lab supplied its logo. Paper summaries are new
-content, paraphrased from their linked primary sources and explicitly labeled as
-research summaries. Preprints are identified explicitly. Software descriptions
+presented as separate links. The lab supplied its light logo; the dark variant is
+an image-tool adaptation with light lettering and pale-blue network lines. Paper overview pages use
+original abstracts and figures with source attribution and licence links. The source
+version is identified explicitly: the GNN paper links to its JCTC publication but
+reproduces the openly licensed arXiv abstract and figure. Software descriptions
 and navigation labels are added to help visitors find the group's public resources.
 
 The lab retains the rights to its branding, photographs, and content. Publication

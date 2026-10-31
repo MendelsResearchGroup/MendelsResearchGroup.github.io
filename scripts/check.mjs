@@ -10,7 +10,14 @@ for(const file of files){
   if((html.match(/<h1[ >]/g)||[]).length!==1)errors.push(`${label}: expected one primary heading`);
   if(!/<meta name="description" content="[^"]+"/.test(html))errors.push(`${label}: missing description`);
   if(!/<link rel="canonical" href="https:\/\//.test(html))errors.push(`${label}: missing canonical URL`);
-  for(const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g))try{JSON.parse(m[1]);}catch{errors.push(`${label}: invalid structured data`);}
+  for(const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g))try{
+    const data=JSON.parse(m[1]);
+    if(!data['@graph']?.some(entity=>entity['@type']==='WebSite'))errors.push(`${label}: missing website identity`);
+    if(label.startsWith('publications'+sep)&&label!=='publications'+sep+'index.html'){
+      for(const name of ['citation_title','citation_author','citation_publication_date'])if(!html.includes(`name="${name}"`))errors.push(`${label}: missing ${name}`);
+      if(!data['@graph']?.some(entity=>entity['@type']==='ScholarlyArticle'&&entity.mainEntityOfPage))errors.push(`${label}: missing paper identity`);
+    }
+  }catch{errors.push(`${label}: invalid structured data`);}
   const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
   if(new Set(ids).size!==ids.length)errors.push(`${label}: duplicate HTML IDs`);
   for(const m of html.matchAll(/\b(?:href|src)="([^"<]+)"/g)){
@@ -26,5 +33,7 @@ for(const file of files){
 }
 for(const name of ['sitemap.xml','robots.txt','search-index.json','404.html'])try{await access(resolve(root,name));}catch{errors.push(`Missing ${name}`);}
 const index=JSON.parse(await readFile(resolve(root,'search-index.json'),'utf8'));
+for(const path of ['search/index.html','404.html'])if(!(await readFile(resolve(root,path),'utf8')).includes('name="robots" content="noindex, follow"'))errors.push(`${path}: should not be indexed`);
+if((await readFile(resolve(root,'sitemap.xml'),'utf8')).includes('/search/'))errors.push('Internal search should not be in the sitemap');
 for(const item of index){const url=new URL(item.url,'https://example.org');let target=resolve(root,'.'+url.pathname);if(url.pathname.endsWith('/'))target=resolve(target,'index.html');try{await access(target);}catch{errors.push(`Search result points to a missing page: ${item.url}`);}}
 if(errors.length){console.error(errors.join('\n'));process.exitCode=1;}else console.log(`Verified ${files.length} HTML files, ${references} internal references, and ${index.length} search entries. No broken local links or missing metadata.`);
