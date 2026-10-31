@@ -1,0 +1,9 @@
+{
+  "name": "mendels-research-group-website",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": { "build": "node scripts/build.mjs", "preview": "node scripts/serve.mjs" },
+  "engines": { "node": ">=22" },
+  "dependencies": { "yaml": "2.8.3" }
+}

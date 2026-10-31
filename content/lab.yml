@@ -1,0 +1,362 @@
+# THE WEBSITE'S CONTENT FILE
+# Edit this file, commit your changes, and GitHub rebuilds the website.
+# Keep the indentation (two spaces). Text after # is a comment.
+# Duplicate a person or publication block to add an entry. No code changes needed.
+
+lab:
+  name: CME Lab
+  full_name: Lab for Computational Molecular Engineering
+  group: Mendels Research Group
+  institution: Technion — Israel Institute of Technology
+  department: Wolfson Department of Chemical Engineering
+  location: Haifa, Israel
+  email: danmendels@technion.ac.il
+  site_url: https://mendelsresearchgroup.github.io
+  github: https://github.com/MendelsResearchGroup
+  original_site: https://mendelsgroup.net.technion.ac.il/
+  logo: /assets/logo.png
+  group_photo: /assets/lab-group.jpg
+  group_photo_caption: The CME group at the Technion · 2024
+  description: Computational molecular engineering at the Technion. The Mendels Research Group combines molecular simulation, physics, chemistry, and AI to understand and design molecules and materials.
+
+home:
+  eyebrow: Physics. Chemistry. Artificial intelligence.
+  title: Understanding molecules. Designing possibility.
+  introduction: >-
+    We develop computational tools to understand how molecular systems work —
+    and to design what they can do next.
+  about_title: From molecular motion to material function.
+  about: >-
+    At the Technion, our group brings molecular dynamics and Monte Carlo simulations
+    together with physics, chemistry, and artificial intelligence. We study the
+    connections between structure, dynamics, and function, working with experimental
+    and industrial partners to translate computational ideas into new technologies.
+
+research:
+  title: Designing at the molecular scale.
+  introduction: >-
+    How does molecular structure give rise to function? We develop and apply
+    computational methods to explore this question, from proteins and polymers
+    to structural materials and energy technologies.
+  methods:
+    - Molecular dynamics
+    - Monte Carlo simulation
+    - Enhanced sampling
+    - Physics-informed machine learning
+  areas:
+    - id: molecular-design
+      number: "01"
+      title: Molecules & proteins
+      subtitle: Dynamics that shape biological function
+      description: >-
+        Computational approaches to drug and protein design, including the
+        free-energy landscapes and kinetic barriers that govern molecular behavior.
+      topics: [Protein design, Peptide kinetics, Free-energy landscapes]
+      publication_ids: [peptide-surface-2026, peptide-kinetics-2026]
+    - id: materials
+      number: "02"
+      title: Materials & mechanics
+      subtitle: Connecting microscopic structure to response
+      description: >-
+        Understanding and engineering smart structural materials and polymers,
+        with studies of disordered elastic networks and structure–property prediction.
+      topics: [Smart materials, Polymers, Elastic networks]
+      publication_ids: [networks-2025, networks-2023]
+    - id: energy
+      number: "03"
+      title: Energy & molecular systems
+      subtitle: Computational tools for emerging technologies
+      description: >-
+        Applying molecular and materials engineering to next-generation solar cells
+        and batteries, alongside methods for understanding phase behavior and solubility.
+      topics: [Solar cells, Batteries, Phase behavior]
+      publication_ids: [solubility-2022, phases-2018]
+
+# PEOPLE: image is a file in public/assets/. Website and email are optional.
+# To remove a member from the site, remove their complete block.
+people:
+  - id: dan-mendels
+    name: Dr. Dan Mendels
+    role: Principal Investigator
+    image: /assets/dan.jpg
+    email: danmendels@technion.ac.il
+    bio: >-
+      Assistant Professor, Chemical Engineering, Technion. Previously a postdoctoral
+      scholar at Chicago’s Pritzker School of Molecular Engineering (smart materials)
+      and jointly at USI and ETH Zurich (enhanced sampling). PhD: Electrical Engineering,
+      Technion. MSc and BSc with honors: Physics, Hebrew University of Jerusalem.
+  - id: sergey-shteingoltz
+    name: Sergey Shteingoltz
+    role: PhD Student
+    image: /assets/sergey.jpg
+    bio: >-
+      Joined March 2023. BSc and MSc, Butlerov’s Chemistry Institute,
+      Kazan Federal University (2014–2019).
+  - id: salman-salman
+    name: Salman Salman
+    role: PhD Student
+    image: /assets/salman.jpeg
+    bio: >-
+      Joined October 2023. Computer Science BSc and MSc with honors, Leipzig and
+      Strathclyde. Interests: machine learning, search optimization, algorithms,
+      scientific computing, and algorithmic information theory at the physics–chemistry interface.
+  - id: muralika-medaparambath
+    name: Muralika Medaparambath
+    role: MSc Student
+    image: /assets/muralika.jpg
+    bio: >-
+      Applied Mathematics master’s student, Technion. Studies protein folding
+      and dynamics using computational and statistical methods.
+  - id: alex-zhilkin
+    name: Alex Zhilkin
+    role: PhD Student
+    image: /assets/alex.jpg
+    website: https://alex-zhilkin.github.io/
+    bio: >-
+      MSc, Theoretical and Computational Methods, Helsinki; research assistant,
+      Sum of Products group. Develops statistical and computational machine-learning
+      methods. Ten years in software engineering, including technical leadership
+      on a Netflix game project. Builds practical tools from research computation.
+  - id: eli-zick
+    name: Eli Zick
+    role: PhD Student
+    image: /assets/eli.png
+    bio: >-
+      Joined April 2025. MSc in Physics, Ural Federal University;
+      background in quantum chemistry, DFT, and NMR applications.
+
+# PUBLICATIONS: newest first; year must be a number. Keep id unique.
+# Required: id, title, authors, year, venue, type, url.
+# Optional: code (a repository URL). type is "Article" or "Preprint".
+# Example:
+#   - id: short-name-2027
+#     title: "A title containing a colon: use quotation marks"
+#     authors: Author One, Author Two
+#     year: 2027
+#     venue: Journal name
+#     type: Article
+#     url: https://doi.org/your-doi
+publications:
+  - id: diffusion-2026
+    title: Gradient-Based Inverse Design of Free-Energy Landscapes with Diffusion Models
+    authors: Eli Zick, Dan Mendels
+    year: 2026
+    venue: arXiv
+    type: Preprint
+    url: https://arxiv.org/abs/2607.06421
+    code: https://github.com/MendelsResearchGroup/Gradient-Based-Free-Energy-Surface-Optimization
+    summary:
+      headline: Designing the landscape, not just a structure.
+      question: Can we choose a target free-energy landscape and work backward to the system parameters that produce it?
+      approach: >-
+        GB-FESO uses a trained conditional diffusion model as a differentiable
+        representation of an ensemble. The model is frozen while the system’s
+        conditioning variables are optimized, comparing generated distributions
+        with a target through a kernel-density-based loss.
+      finding: >-
+        Tests recovered target Gaussian distributions, including targets beyond
+        the training domain. In a four-particle Lennard-Jones toy peptide,
+        optimized interaction parameters reproduced target landscapes in most
+        tested cases, using either internal coordinates or collective variables.
+      significance: >-
+        This is a proof of concept for ensemble-level inverse design.
+        The demonstrations use simplified systems; applying the framework
+        to larger molecular systems remains a next step.
+      source: https://arxiv.org/abs/2607.06421
+  - id: gnn-2026
+    title: Enabling Structure-Only Initialization and Out-of-Distribution Generalization in GNN-based Molecular Dynamics Simulators
+    authors: Sergey A. Shteingolts, Salman N. Salman, Dan Mendels
+    year: 2026
+    venue: arXiv
+    type: Preprint
+    url: https://arxiv.org/abs/2605.09495
+    summary:
+      headline: Starting a learned simulator from structure alone.
+      question: How can a graph neural network simulate a new material from one static configuration, including structures outside its training distribution?
+      approach: >-
+        The study develops two complementary initialization strategies,
+        physics-based optimization during inference, and a differentiable
+        GNN barostat to track pressure and changing system dimensions.
+      finding: >-
+        On compressed disordered elastic networks, the combined methods improve
+        simulation stability and generalization across geometries, Poisson ratios,
+        and microscopic responses, including more complex dynamical regimes
+        than those represented in training.
+      significance: >-
+        Structure-only initialization and physically constrained rollouts make
+        learned simulators more useful for inverse design. The evidence here
+        concerns elastic-network benchmarks rather than unrestricted molecular systems.
+      source: https://arxiv.org/abs/2605.09495
+  - id: peptide-surface-2026
+    title: Collective Variable-Guided Engineering of the Free-Energy Surface of a Small Peptide
+    authors: Muralika Medaparambath, Alexander Zhilkin, Dan Mendels
+    year: 2026
+    venue: Journal of Chemical Information and Modeling
+    type: Article
+    url: https://pubs.acs.org/doi/10.1021/acs.jcim.6c00674
+    code: https://github.com/MendelsResearchGroup/CV-guided-FES-engineering
+    summary:
+      headline: Reading mutation effects from local molecular motion.
+      question: Can short simulations help identify how a peptide mutation changes the balance between folded and unfolded states?
+      approach: >-
+        The work applies CV-FEST and harmonic linear discriminant analysis
+        to short, unbiased simulations of the ten-residue peptide CLN025
+        and a library of single-point mutants. Predictions are compared
+        with replica-exchange molecular dynamics benchmarks.
+      finding: >-
+        A collective variable learned from the wild type identifies positions
+        sensitive to mutation. Changes in the leading HLDA eigenvalue across
+        mutants correlate with shifts in melting temperature, connecting
+        local fluctuations to thermodynamic stability.
+      significance: >-
+        The results support an economical way to guide peptide mutation studies
+        when data are limited. The correlations provide guidance, with validation
+        on a small peptide rather than a universal predictor of protein stability.
+      source: https://pmc.ncbi.nlm.nih.gov/articles/PMC13418176/
+  - id: peptide-kinetics-2026
+    title: Guiding Peptide Kinetics via Collective-Variable Tuning of Free-Energy Barriers
+    authors: Alexander Zhilkin, Muralika Medaparambath, Dan Mendels
+    year: 2026
+    venue: Journal of Chemical Theory and Computation
+    type: Article
+    url: https://pubs.acs.org/doi/10.1021/acs.jctc.6c00418
+    code: https://github.com/MendelsResearchGroup/guiding-peptide-kinetics
+    summary:
+      headline: Small fluctuations, clues to rare transitions.
+      question: Can motion within a peptide’s folded and unfolded states reveal which mutations change its unfolding rate?
+      approach: >-
+        Using Chignolin as a test system, the study constructs HLDA collective
+        variables from short simulations confined to metastable basins.
+        Wild-type residue weights and mutant-specific eigenvalues are compared
+        with unfolding times estimated using short-time infrequent metadynamics.
+      finding: >-
+        Wild-type residue scores identify positions where mutations tend to
+        alter unfolding kinetics. Across point mutants, the leading HLDA
+        eigenvalue is significantly associated with transition times.
+        Learning the collective variable does not require observing transitions.
+      significance: >-
+        Local sampling can guide the search for mutations that change kinetic
+        behavior. The association is imperfect, and extension to larger peptides
+        and proteins still needs to be demonstrated.
+      source: https://pmc.ncbi.nlm.nih.gov/articles/PMC13173532/
+  - id: networks-2025
+    title: "Evaluating the use of a machine learning simulator for structure–property prediction: A case study on disordered elastic networks"
+    authors: Salman N. Salman, Sergey A. Shteingolts, Ron Levie, Dan Mendels
+    year: 2025
+    venue: The Journal of Chemical Physics
+    type: Article
+    url: https://pubs.aip.org/aip/jcp/article/163/12/124115/3364390/
+    summary:
+      headline: Learning material properties through dynamics.
+      question: Can a model trained to simulate motion predict material properties it was never explicitly taught?
+      approach: >-
+        A graph neural network learns the dynamics of two-dimensional disordered
+        elastic networks under uniaxial compression from a small number of
+        examples. Its rollouts are used to evaluate emergent mechanical behavior.
+      finding: >-
+        The simulator reproduces the evolution of unseen networks and predicts
+        Poisson’s ratio and its strain dependence without direct property training.
+        It also generalizes across temperatures, strain amplitudes, and Poisson
+        ratios outside the training range.
+      significance: >-
+        Dynamical training can support more data-efficient structure–property
+        prediction. The study establishes this behavior for elastic networks,
+        motivating further work on materials and molecular design.
+      source: https://doi.org/10.1063/5.0282871
+  - id: networks-2023
+    title: Systematic Modification of Functionality in Disordered Elastic Networks Through Free Energy Surface Tailoring
+    authors: D Mendels, F Byléhn, TW Sirk, JJ de Pablo
+    year: 2023
+    venue: Science Advances
+    type: Article
+    url: https://www.science.org/doi/10.1126/sciadv.adf7541
+  - id: rare-events-2022
+    title: "Collective Variables for Free Energy Surface Tailoring: Understanding and Modifying Functionality in Systems Dominated by Rare Events"
+    authors: D Mendels, JJ de Pablo
+    year: 2022
+    venue: The Journal of Physical Chemistry Letters
+    type: Article
+    url: https://pubs.acs.org/doi/10.1021/acs.jpclett.2c00317
+  - id: solubility-2022
+    title: "Solubility of organic salts in solvent-antisolvent mixtures: A combined experimental and molecular dynamics simulations approach"
+    authors: Z Bjelobrk, AK Rajagopalan, D Mendels, T Karmakar, M Parrinello, M Mazzotti
+    year: 2022
+    venue: Journal of Chemical Theory and Computation
+    type: Article
+    url: https://pubs.acs.org/doi/10.1021/acs.jctc.2c00304
+  - id: solubility-2021
+    title: Solubility prediction of organic molecules with molecular dynamics simulations
+    authors: Z Bjelobrk, D Mendels, T Karmakar, M Parrinello, M Mazzotti
+    year: 2021
+    venue: Crystal Growth & Design
+    type: Article
+    url: https://pubs.acs.org/doi/10.1021/acs.cgd.1c00546
+  - id: pathways-2019
+    title: Blind search for complex chemical pathways using harmonic linear discriminant analysis
+    authors: V Rizzi, D Mendels, E Sicilia, M Parrinello
+    year: 2019
+    venue: Journal of Chemical Theory and Computation
+    type: Article
+    url: https://pubs.acs.org/doi/10.1021/acs.jctc.9b00358
+  - id: folding-2018
+    title: Folding a small protein using harmonic linear discriminant analysis
+    authors: D Mendels, GM Piccini, ZF Brotzakis, YI Yang, M Parrinello
+    year: 2018
+    venue: The Journal of Chemical Physics
+    type: Article
+    url: https://doi.org/10.1063/1.5053566
+  - id: metadynamics-2018
+    title: "Metadynamics with discriminants: A tool for understanding chemistry"
+    authors: GM Piccini, D Mendels, M Parrinello
+    year: 2018
+    venue: Journal of Chemical Theory and Computation
+    type: Article
+    url: https://pubs.acs.org/doi/10.1021/acs.jctc.8b00634
+  - id: fluctuations-2018
+    title: Collective variables from local fluctuations
+    authors: D Mendels, GM Piccini, M Parrinello
+    year: 2018
+    venue: The Journal of Physical Chemistry Letters
+    type: Article
+    url: https://pubs.acs.org/doi/10.1021/acs.jpclett.8b00733
+  - id: phases-2018
+    title: "Searching for entropically stabilized phases: The case of silver iodide"
+    authors: D Mendels, J McCarty, PM Piaggi, M Parrinello
+    year: 2018
+    venue: The Journal of Physical Chemistry C
+    type: Article
+    url: https://pubs.acs.org/doi/10.1021/acs.jpcc.7b11002
+
+software:
+  title: Research you can build on.
+  introduction: Explore code, analysis, and data shared by the group. Each repository contains its own usage and citation information.
+  projects:
+    - name: hlda-cv
+      category: Method / Python
+      description: Harmonic linear discriminant analysis utilities for constructing collective variables, with a peptide example.
+      url: https://github.com/MendelsResearchGroup/hlda-cv
+    - name: guiding-peptide-kinetics
+      category: Paper / Code & data
+      description: The reproducibility snapshot for the group’s study of mutation-dependent chignolin kinetics using CV-FEST and HLDA.
+      url: https://github.com/MendelsResearchGroup/guiding-peptide-kinetics
+    - name: CV-guided-FES-engineering
+      category: Paper / Analysis & simulation
+      description: Analysis scripts, example data, and simulation inputs for collective-variable-guided peptide free-energy engineering.
+      url: https://github.com/MendelsResearchGroup/CV-guided-FES-engineering
+    - name: Gradient-Based-Free-Energy-Surface-Optimization
+      category: Research / Python
+      description: Code from the group’s work on gradient-based free-energy landscape optimization.
+      url: https://github.com/MendelsResearchGroup/Gradient-Based-Free-Energy-Surface-Optimization
+
+positions:
+  title: Bring your curiosity.
+  subtitle: Join the CME Lab
+  introduction: >-
+    We welcome motivated students and postdoctoral researchers interested in
+    computational molecular engineering. Our projects connect physics, chemistry,
+    materials science, and computer science.
+  backgrounds: [Chemical engineering, Physics, Chemistry, Materials science, Computer science, Related disciplines]
+  details: >-
+    Contact Dr. Dan Mendels to discuss available projects and opportunities.
+    Tell us about your background and the research questions that interest you.
+  contact_label: Discuss an opportunity
