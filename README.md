@@ -106,8 +106,8 @@ pull requests build and validate without deploying. No personal token is require
 
 ## Design and discoverability
 
-The site uses the supplied CME logo, serif editorial typography, blue and teal
-accents, responsive layouts, and descriptive navigation. It includes canonical
+The site uses the supplied CME logo, bold sans-serif typography, real group
+photography, responsive layouts, and descriptive navigation. It includes canonical
 URLs, metadata for sharing, structured organization/person/publication data,
 a sitemap, accessible labels, and keyboard focus styles. Search engines can crawl
 the core content without JavaScript. Indexing and search rankings are not guaranteed.
@@ -120,10 +120,12 @@ footer; domain redirects require access to that site's hosting.
 
 People, research areas, positions, publication titles, and original photographs
 were migrated from https://mendelsgroup.net.technion.ac.il/ on 31 October 2026.
-Bios and introductory copy were edited for clarity. The logo was supplied by the lab.
-Paper summaries are paraphrased from their linked primary sources. Preprints are
-identified explicitly. The homepage landscape is a conceptual illustration, not
-a measured or simulated result.
+The homepage, research introduction, biographies, and positions text preserve the
+original website's wording, with whitespace normalized and contact/profile URLs
+presented as separate links. The lab supplied its logo. Paper summaries are new
+content, paraphrased from their linked primary sources and explicitly labeled as
+research summaries. Preprints are identified explicitly. Software descriptions
+and navigation labels are added to help visitors find the group's public resources.
 
 The lab retains the rights to its branding, photographs, and content. Publication
 links point to the publishers or preprint repositories; no paper PDFs are redistributed.
