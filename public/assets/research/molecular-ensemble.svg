@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="320" viewBox="0 0 640 320">
+  <title>Molecular ensemble</title>
+  <desc>Conceptual four-site configurations and motion paths, inspired by graph-based molecular simulation and diffusion-based ensemble design. These are illustrative coordinates, not calculated trajectories or experimental results.</desc>
+  <defs>
+    <radialGradient id="fade" cx="58%" cy="49%" r="57%"><stop offset="0" stop-color="white"/><stop offset=".7" stop-color="white" stop-opacity=".9"/><stop offset="1" stop-color="white" stop-opacity="0"/></radialGradient>
+    <mask id="edge"><rect width="640" height="320" fill="url(#fade)"/></mask>
+  </defs>
+  <g mask="url(#edge)" fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round">
+    <g stroke-width="1" opacity=".45">
+      <path d="M52 186C131 185 159 117 223 119S308 178 369 162 446 84 520 113"/>
+      <path d="M75 235C148 224 176 151 237 166S319 220 390 211 471 146 549 167"/>
+      <path d="M109 121C174 125 190 73 258 83S344 139 412 122 471 49 580 78"/>
+      <path d="M144 193C201 182 232 227 286 203S352 133 414 159 495 241 598 197"/>
+    </g>
+    <g stroke-width="1.5" opacity=".18">
+      <path d="m52 186 23 49 69-42-35-72-57 65m23 49 34-114m-57 65 92 7"/>
+      <g fill="black" stroke="none"><circle cx="52" cy="186" r="4"/><circle cx="75" cy="235" r="4"/><circle cx="144" cy="193" r="4"/><circle cx="109" cy="121" r="4"/></g>
+    </g>
+    <g stroke-width="1.5" opacity=".32">
+      <path d="m139 143 30 48 62-1-48-90-44 43m30 48 14-91m-44 43 92 47"/>
+      <g fill="black" stroke="none"><circle cx="139" cy="143" r="4"/><circle cx="169" cy="191" r="4"/><circle cx="231" cy="190" r="4"/><circle cx="183" cy="100" r="4"/></g>
+    </g>
+    <g stroke-width="1.5" opacity=".52">
+      <path d="m223 119 14 47 49 37-28-120-35 36m14 47 21-83m-35 36 63 84"/>
+      <g fill="black" stroke="none"><circle cx="223" cy="119" r="4.5"/><circle cx="237" cy="166" r="4.5"/><circle cx="286" cy="203" r="4.5"/><circle cx="258" cy="83" r="4.5"/></g>
+    </g>
+    <g stroke-width="1.5" opacity=".66">
+      <path d="m298 144 20 51 33-22-12-68-41 39m20 51 21-90m-41 39 53 29"/>
+      <g fill="black" stroke="none"><circle cx="298" cy="144" r="4.5"/><circle cx="318" cy="195" r="4.5"/><circle cx="351" cy="173" r="4.5"/><circle cx="339" cy="105" r="4.5"/></g>
+    </g>
+    <g stroke-width="1.65" opacity=".88">
+      <path d="m369 162 21 49 24-52-2-37-43 40m21 49 22-89m-43 40 45-3"/>
+      <g fill="black" stroke="none"><circle cx="369" cy="162" r="5"/><circle cx="390" cy="211" r="5"/><circle cx="414" cy="159" r="5"/><circle cx="412" cy="122" r="5"/></g>
+    </g>
+    <g stroke-width="1.5" opacity=".48">
+      <path d="m447 129 24 54 30 22-14-119-40 43m24 54 16-97m-40 43 54 76"/>
+      <g fill="black" stroke="none"><circle cx="447" cy="129" r="4.5"/><circle cx="471" cy="183" r="4.5"/><circle cx="501" cy="205" r="4.5"/><circle cx="487" cy="86" r="4.5"/></g>
+    </g>
+    <g stroke-width="1.5" opacity=".3">
+      <path d="m520 113 29 54 49 30-18-119-60 35m29 54 31-89m-60 35 78 84"/>
+      <g fill="black" stroke="none"><circle cx="520" cy="113" r="4"/><circle cx="549" cy="167" r="4"/><circle cx="598" cy="197" r="4"/><circle cx="580" cy="78" r="4"/></g>
+    </g>
+  </g>
+</svg>

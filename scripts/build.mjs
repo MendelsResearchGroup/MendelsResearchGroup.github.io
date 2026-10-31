@@ -15,12 +15,12 @@ const url = (v, path) => { text(v, path); try { if (!['https:', 'http:'].include
 const list = (v, path) => { if (!Array.isArray(v) || !v.length) fail(path, 'provide a list with at least one entry'); };
 const object = (v, path) => { if (!v || typeof v !== 'object' || Array.isArray(v)) fail(path, 'provide a section with indented fields'); };
 for (const k of ['lab', 'home', 'research', 'software', 'positions']) object(d[k], k);
-for (const [section, fields] of Object.entries({ lab: ['name','full_name','group','institution','department','location','email','logo','group_photo','group_photo_caption','description'], home: ['eyebrow','title','welcome','introduction','about_title','about'], research: ['title','introduction','context'], software: ['title','introduction'], positions: ['title','subtitle','introduction','details','contact_label'] })) for (const f of fields) text(d[section][f], `${section}.${f}`);
+for (const [section, fields] of Object.entries({ lab: ['name','full_name','group','institution','department','location','email','logo','group_photo','group_photo_caption','description'], home: ['eyebrow','title','title_secondary','introduction','about_title','about'], research: ['title','introduction','context'], software: ['title','introduction'], positions: ['title','subtitle','introduction','details','contact_label'] })) for (const f of fields) text(d[section][f], `${section}.${f}`);
 if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.lab.email)) fail('lab.email', 'provide an email address');
 for (const k of ['site_url','github','original_site']) url(d.lab[k], `lab.${k}`);
 if (d.lab.google_site_verification && (typeof d.lab.google_site_verification!=='string'||!(/^[A-Za-z0-9_-]+$/).test(d.lab.google_site_verification))) fail('lab.google_site_verification','use only the token from Google, without the surrounding HTML tag');
 for (const path of ['people','publications','research.areas','software.projects','positions.backgrounds']) list(path.split('.').reduce((v,k) => v?.[k], d), path);
-for (const [collection, fields] of [[d.people,['id','name','role','image','bio']], [d.publications,['id','title','authors','venue','type','url']], [d.research.areas,['id','number','title']], [d.software.projects,['name','category','description','url']]]) {
+for (const [collection, fields] of [[d.people,['id','name','role','image','bio']], [d.publications,['id','title','authors','venue','type','url']], [d.research.areas,['id','number','title','summary','question','description','example']], [d.software.projects,['name','category','description','url']]]) {
   const seen = new Set();
   for (const [i, item] of collection.entries()) {
     object(item, `entry ${i+1}`);
@@ -47,10 +47,14 @@ for (const p of d.publications) {
   if (!Number.isInteger(figure.width)||!Number.isInteger(figure.height)||figure.width<1||figure.height<1) fail(`${p.id}.overview.figure`, 'provide positive width and height values');
 }
 for (const area of d.research.areas) {
+  list(area.methods, `${area.id}.methods`);
+  for (const [i,method] of area.methods.entries()) text(method, `${area.id}.methods.${i}`);
+  if (!Array.isArray(area.person_ids)) fail(`${area.id}.person_ids`, 'provide a list, or [] for no related people');
+  for (const id of area.person_ids) if (!d.people.some(p=>p.id===id)) fail(`${area.id}.person_ids`, `unknown person "${id}"`);
   if (!Array.isArray(area.publication_ids)) fail(`${area.id}.publication_ids`, 'provide a list, or [] for no related papers');
   for (const id of area.publication_ids) if (!d.publications.some(p => p.id === id)) fail(`${area.id}.publication_ids`, `unknown publication "${id}"`);
 }
-const images = [d.lab.logo, ...(d.lab.logo_dark?[d.lab.logo_dark]:[]), d.lab.group_photo, ...d.people.map(p => p.image), ...d.publications.filter(p=>p.overview).map(p=>p.overview.figure.image)];
+const images = [d.lab.logo, ...(d.lab.logo_dark?[d.lab.logo_dark]:[]), ...(d.home.hero_visual?[d.home.hero_visual]:[]), d.lab.group_photo, ...d.people.map(p => p.image), ...d.publications.filter(p=>p.overview).map(p=>p.overview.figure.image)];
 for (const image of images) {
   if (typeof image !== 'string' || !/^\/assets\/(?:[a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_-][a-zA-Z0-9_.-]*\.(?:jpg|jpeg|png|webp|svg)$/.test(image)) fail('image', 'use a file within /assets/');
   try { await access(resolve(root, 'public', image.slice(1))); } catch { fail(image, 'image file is missing from public/assets/'); }
@@ -101,11 +105,28 @@ async function page(path, title, description, body, structured, indexText='') {
 function intro(kicker,title,description) {return `<section class="page-intro wrap"><p class="eyebrow">${e(kicker)}</p><h1>${e(title)}</h1>${description?`<p class="intro-copy">${e(description)}</p>`:''}</section>`;}
 function paper(p, compact=false) {return `<article class="paper${compact?' compact':''}" id="${e(p.id)}" data-year="${p.year}"><div class="paper-year">${p.year}<span>${e(p.type)}</span></div><div class="paper-main"><p class="label">${e(p.venue)}</p><h${compact?'3':'2'}><a href="${e(p.overview?'/publications/'+p.id+'/':p.url)}">${e(p.title)}</a></h${compact?'3':'2'}><p class="authors">${e(p.authors)}</p><div class="paper-links">${p.overview?link('/publications/'+p.id+'/','Overview'):''}${link(p.url,p.type==='Preprint'?'Read preprint':'Read paper')}${p.code?link(p.code,'Code & data'):''}</div></div></article>`;}
 function joinBand() {return `<section class="join-band"><div class="wrap join-inner"><div><p class="eyebrow">Join the group</p><h2>${e(d.positions.title)}</h2><p>${e(d.positions.introduction)}</p></div>${link('/join/','Explore opportunities','button button-light')}</div></section>`;}
+function researchSummary(area) {
+  return `<article class="home-research-card"><span class="area-number">${e(area.number)}</span><h3>${e(area.title)}</h3><p>${e(area.summary)}</p><a class="text-link" href="/research/#${e(area.id)}" aria-label="Explore ${e(area.title)}">Explore this direction ${arrow}</a></article>`;
+}
+function researchArea(area) {
+  const people=area.person_ids.map(id=>d.people.find(p=>p.id===id));
+  const studies=area.publication_ids.map(id=>d.publications.find(p=>p.id===id));
+  return `<section class="research-area" id="${e(area.id)}" aria-labelledby="heading-${e(area.id)}">
+    <span class="area-number">${e(area.number)}</span>
+    <div class="research-area-content"><h2 id="heading-${e(area.id)}">${e(area.title)}</h2>
+      <p class="research-question">${e(area.question)}</p><p class="research-description">${e(area.description)}</p>
+      <div class="research-example"><p class="label">Example from recent work</p><p>${e(area.example)}</p></div>
+      <div class="tags research-methods" role="group" aria-label="Methods">${chips(area.methods)}</div>
+      ${people.length?`<div class="research-people"><p class="label">Related people</p><div>${people.map(p=>link('/people/'+p.id+'/',p.name)).join('')}</div></div>`:''}
+    </div>
+    ${studies.length?`<aside aria-label="Publications for ${e(area.title)}"><h3>Related publications</h3>${studies.map(p=>`<div class="related-study"><a class="related-paper" href="${p.overview?'/publications/'+e(p.id)+'/':'/publications/#'+e(p.id)}"><span>${p.year} / ${e(p.type)}</span>${e(p.title)} ${arrow}</a>${p.code?link(p.code,'Code & data'):''}</div>`).join('')}</aside>`:''}
+  </section>`;
+}
 await page('/',d.lab.group,d.lab.description,`
-<section class="hero wrap"><p class="eyebrow">${e(d.lab.group)} <span>/ ${e(d.lab.institution)}</span></p><h1><span>${e(d.home.eyebrow)}</span>${e(d.home.title)}</h1><div class="home-introduction"><h2>${e(d.home.welcome)}</h2><div class="hero-intro"><p>${e(d.home.introduction)}</p><div class="hero-actions">${link('/research/','Research','button')}${link('/people/','Meet the team')}</div></div></div></section>
-<section class="about-background"><div class="wrap about-section"><div><p class="eyebrow">Research</p><h2>${e(d.home.about_title)}</h2><div class="about-links">${link('/research/','Research areas')}${link('/software/','Software & code')}</div></div><div>${d.home.about.split('\n\n').map(p=>`<p class="large-copy">${e(p)}</p>`).join('')}</div></div></section>
+<section class="hero hero-current wrap">${d.home.hero_visual?`<div class="hero-visual" style="--hero-art:url('${e(d.home.hero_visual)}')" aria-hidden="true"></div>`:''}<p class="eyebrow">${e(d.lab.group)} <span>/ ${e(d.lab.institution)}</span></p><p class="hero-lab-name">${e(d.home.eyebrow)}</p><h1><span class="hero-title-line">${e(d.home.title)}</span><span class="hero-title-line">${e(d.home.title_secondary)}</span></h1><div class="hero-intro"><p>${e(d.home.introduction)}</p><div class="hero-actions">${link('/research/','Explore the research','button')}${link('/join/','Join the lab')}</div></div></section>
+<section class="about-background home-research"><div class="wrap"><div class="section-heading"><div><p class="eyebrow">Research</p><h2>${e(d.home.about_title)}</h2></div>${link('/research/','All research')}</div><p class="home-research-intro">${e(d.home.about)}</p><div class="home-research-grid">${d.research.areas.map(researchSummary).join('')}</div></div></section>
 <section class="recent wrap"><div class="section-heading"><div><p class="eyebrow">Publications</p><h2>Recent selected publications</h2></div>${link('/publications/','All publications')}</div>${publications.slice(0,3).map(p=>paper(p,true)).join('')}</section>${joinBand()}`);
-await page('/research/','Research',d.research.introduction,`${intro('Research',d.research.title,d.research.introduction)}<section class="wrap research-context"><p class="large-copy">${e(d.research.context)}</p></section><div class="wrap research-details">${d.research.areas.map(a=>`<section class="research-area" id="${e(a.id)}"><span class="area-number">${e(a.number)}</span><div><h2>${e(a.title)}</h2></div>${a.publication_ids.length?`<aside><h3>Related publications</h3>${a.publication_ids.map(id=>{const p=d.publications.find(p=>p.id===id);return `<a class="related-paper" href="${p.overview?'/publications/'+e(id)+'/':'/publications/#'+e(id)}"><span>${p.year} / ${e(p.type)}</span>${e(p.title)} ${arrow}</a>`;}).join('')}</aside>`:''}</section>`).join('')}</div>${joinBand()}`,organization,d.research.areas.map(a=>a.title).join(' '));
+await page('/research/','Research',d.research.introduction,`${intro('Research',d.research.title,d.research.introduction)}<section class="wrap research-context"><p class="large-copy">${e(d.research.context)}</p><nav class="research-index" aria-label="Research directions">${d.research.areas.map(a=>link('/research/#'+a.id,a.number+' / '+a.title)).join('')}</nav></section><div class="wrap research-details">${d.research.areas.map(researchArea).join('')}</div>${joinBand()}`,organization,d.research.areas.map(a=>[a.title,a.question,a.description,a.example,...a.methods].join(' ')).join(' '));
 const pi = d.people.find(p=>p.role==='Principal Investigator') || d.people[0];
 const personLinks = p => `${p.email?link('mailto:'+p.email,'Email'):''}${p.website?link(p.website,'Personal website'):''}${p.orcid?link(p.orcid,'ORCID'):''}`;
 const personCard = p => `<article class="person-card" id="${e(p.id)}"><a class="portrait-link" href="/people/${e(p.id)}/"><img src="${e(p.image)}" width="600" height="750" loading="lazy" alt="${e(p.name)}"></a><p class="label">${e(p.role)}</p><h2><a href="/people/${e(p.id)}/">${e(p.name)}</a></h2><p>${e(p.bio)}</p><div class="person-links">${personLinks(p)}</div></article>`;
@@ -145,7 +166,7 @@ for (const p of publications.filter(p=>p.overview)) {
 }
 // Add older bibliography entries to search independently.
 for (const p of publications.filter(p=>!p.overview)) searchIndex.push({title:p.title,url:'/publications/#'+p.id,category:'Publication · '+p.year,text:p.authors+' '+p.venue+' '+p.title});
-for (const area of d.research.areas) searchIndex.push({title:area.title,url:'/research/#'+area.id,category:'Research',text:area.title});
+for (const area of d.research.areas) searchIndex.push({title:area.title,url:'/research/#'+area.id,category:'Research',text:[area.summary,area.question,area.description,area.example,...area.methods,...area.person_ids.map(id=>d.people.find(p=>p.id===id).name)].join(' ')});
 await writeFile(resolve(out,'search-index.json'),json(searchIndex));
 const urls = pages.map(p=>p[0]).concat(d.people.map(p=>'/people/'+p.id+'/'),publications.filter(p=>p.overview).map(p=>'/publications/'+p.id+'/'),'/search/');
 await writeFile(resolve(out,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.filter(p=>p!=='/search/').map(p=>`<url><loc>${e(base+p)}</loc></url>`).join('')}</urlset>`);

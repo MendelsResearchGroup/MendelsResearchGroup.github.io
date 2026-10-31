@@ -87,6 +87,7 @@ content/lab.yml             All editable text, people, papers, and image paths
 public/assets/people/       Portraits and group.jpg
 public/assets/papers/       Main paper figures, named by publication ID
 public/assets/brand/        logo-light.png and logo-dark.png
+public/assets/research/     Optional decorative research visual for the homepage
 ```
 
 Upload the image with GitHub's **Add file → Upload files**, then update its path
@@ -96,11 +97,30 @@ the paper's `overview.figure.image`; portraits use the person's `image` field.
 `lab.logo` and optional `lab.logo_dark` control the two logo variants. The logo
 switches with the active theme automatically.
 
+`home.hero_visual` selects the optional homepage SVG. Remove that field to hide
+it. The current static molecular ensemble is a conceptual drawing inspired by
+the group's GNN molecular simulators and diffusion-based ensemble design, not
+simulation data or a reproduced paper figure. It uses the theme's colors, stays
+behind the heading area, is hidden on small screens, and is excluded from the
+accessibility tree because it conveys no additional information.
+
 ### Other edits
 
 The same YAML file contains the lab information, homepage copy, research directions,
 software links, and open positions. Related reading uses publication IDs. When
 removing a publication, remove its ID from any research area's `publication_ids` too.
+
+Each entry in `research.areas` supplies both its homepage card and its full
+Research section. Edit `summary` for the short card, then `question`, `description`,
+and `example` for the detailed explanation. `methods` is a list of short labels.
+`person_ids` links existing people, and `publication_ids` links existing papers.
+Code links appear automatically when a related paper has a `code:` URL. Remove a
+person's ID from research areas when removing their profile. Keep research IDs
+stable so direct section links keep working. Research text is included in site search.
+
+The homepage uses `home.title` and `home.title_secondary` for its two-part research
+headline. Its introduction, research-section heading, and short supporting text
+remain editable in the same YAML file.
 
 ## If a build fails
 
@@ -175,9 +195,11 @@ footer; domain redirects require access to that site's hosting.
 
 People, research areas, positions, publication titles, and original photographs
 were migrated from https://mendelsgroup.net.technion.ac.il/ on 31 October 2026.
-The homepage, research introduction, biographies, and positions text preserve the
-original website's wording, with whitespace normalized and contact/profile URLs
-presented as separate links. The lab supplied its light logo; the dark variant is
+The biographies and positions text preserve the original website's wording, with
+whitespace normalized and contact/profile URLs presented as separate links. The
+homepage and research directions were rewritten at the lab's request around the
+recent GNN, peptide free-energy/kinetics, diffusion, and disordered-network papers;
+each research direction links to its supporting studies. The lab supplied its light logo; the dark variant is
 an image-tool adaptation with light lettering and pale-blue network lines. Paper overview pages use
 original abstracts and figures with source attribution and licence links. The source
 version is identified explicitly: the GNN paper links to its JCTC publication but

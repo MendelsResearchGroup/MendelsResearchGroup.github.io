@@ -20,59 +20,91 @@ lab:
   logo_dark: /assets/brand/logo-dark.png
   group_photo: /assets/people/group.jpg
   group_photo_caption: The CME group at the Technion · 2024
-  description: We focus on developing and applying computational tools for understanding and designing
-    molecular systems and materials. We are driven by intellectual curiosity and a desire to
-    contribute to the development of new technologies aimed to tackle societal challenges.
+  description: Computational molecular engineering at the Technion. We develop simulation and
+    machine-learning methods for molecular dynamics, free-energy landscapes, and disordered materials.
 
 home:
-  eyebrow: Lab for
-  title: Computational Molecular Engineering
+  # Optional decorative SVG. Remove this field to hide the homepage visual.
+  hero_visual: /assets/research/molecular-ensemble.svg
+  eyebrow: Computational Molecular Engineering
+  title: Learning molecular dynamics.
+  title_secondary: Engineering free-energy landscapes.
   introduction: >-
-    We focus on developing and applying computational tools for understanding and designing
-    molecular systems and materials. We are driven by intellectual curiosity and a desire to
-    contribute to the development of new technologies aimed to tackle societal challenges.
-  about_title: Our research
+    We develop simulation and machine-learning methods to understand how structures give rise
+    to motion, stability, and mechanical response. Our current work connects learned dynamics,
+    the design of free-energy landscapes, and disordered materials.
+  about_title: Three connected research directions
   about: >-
-    Using molecular dynamics and Monte Carlo simulations, we study systems with the prime objective
-    of mapping and understanding their structure-dynamics-function relationships. To do this, we
-    employ, develop and combine Physics-, Chemistry- and Artificial Intelligence-based tools.
-
-
-    To apply our methodology in the real world, we collaborate with experimental and industrial
-    partners. Projects of current interest lie within the fields of drug and protein design, smart
-    structural materials, polymer design, and next generation solar cells and batteries.
-  welcome: Welcome to our group!
+    Explore the questions, methods, and recent studies behind our work.
 
 research:
-  title: Our research
+  title: Research
   introduction: >-
-    Using molecular dynamics and Monte Carlo simulations, we study systems with the prime objective
-    of mapping and understanding their structure-dynamics-function relationships. To do this, we
-    employ, develop and combine Physics-, Chemistry- and Artificial Intelligence-based tools.
+    We connect molecular simulation, statistical mechanics, and machine learning to understand
+    how microscopic structure shapes the behavior of molecular systems and materials.
+  context: >-
+    Our recent studies span peptide systems and two-dimensional disordered elastic networks.
+    Across these systems, we study how learning from dynamics can support property prediction
+    and the design of desired behavior.
+  # Each direction supplies its homepage summary and full Research section.
+  # Use existing person and publication IDs for the related links.
   areas:
-    - id: molecular-design
+    - id: learned-dynamics
       number: "01"
-      title: Drug and protein design
+      title: Learning molecular dynamics
+      summary: Learning how systems evolve, with graph-based simulators that can start from a
+        single structure and generalize beyond their training data.
+      question: How can a learned simulator start from a single structure and remain useful
+        beyond the systems it was trained on?
+      description: >-
+        We build graph neural network simulators that learn how a system evolves. Our recent
+        work addresses starting a simulation from a single structure, keeping predictions
+        physically consistent, and tracking pressure and system dimensions during a rollout.
+      example: >-
+        Our 2026 study tests these methods on two-dimensional disordered elastic networks under
+        compression, including networks with responses outside the training distribution.
+      methods: [Graph neural networks, Differentiable simulation, Generalization]
+      person_ids: [sergey-shteingoltz, salman-salman]
+      publication_ids: [gnn-2026]
+    - id: free-energy-landscapes
+      number: "02"
+      title: Engineering free-energy landscapes and kinetics
+      summary: Connecting molecular changes to stability and transition rates, and using
+        generative models to work toward target conformational ensembles.
+      question: How can we tune which molecular states are populated, and how quickly a system
+        moves between them?
+      description: >-
+        We use collective variables, compact descriptions of molecular motion, derived from
+        short molecular dynamics trajectories to study how mutations change peptide stability
+        and transition rates. In parallel, we investigate conditional diffusion models as
+        differentiable surrogates for optimizing a target conformational ensemble.
+      example: >-
+        Peptide studies focus on chignolin and CLN025. Diffusion-based inverse design is
+        demonstrated on Gaussian distributions and a four-particle Lennard–Jones toy peptide.
+      methods: [Molecular dynamics, Collective variables, Diffusion models]
+      person_ids: [muralika-medaparambath, alex-zhilkin, eli-zick]
       publication_ids:
         - peptide-surface-2026
         - peptide-kinetics-2026
-    - id: materials
-      number: "02"
-      title: Smart structural materials
-      publication_ids:
-        - networks-2025
-        - networks-2023
-    - id: polymers
+        - diffusion-2026
+    - id: disordered-materials
       number: "03"
-      title: Polymer design
-      publication_ids: []
-    - id: energy
-      number: "04"
-      title: Next generation solar cells and batteries
-      publication_ids: []
-  context: To apply our methodology in the real world, we collaborate with experimental and industrial
-    partners. Projects of current interest lie within the fields of drug and protein design, smart
-    structural materials, polymer design, and next generation solar cells and batteries.
+      title: Designing disordered materials
+      summary: Studying how microscopic structure determines mechanical response, using
+        disordered elastic networks as model systems.
+      question: How do microscopic structure and interactions determine a material's
+        large-scale mechanical response?
+      description: >-
+        We use disordered elastic networks as model systems for studying mechanical behavior.
+        By learning from dynamical trajectories, we examine whether simulators can predict
+        emergent properties such as Poisson's ratio and transfer to networks outside their
+        training range.
+      example: >-
+        The 2025 study examines uniaxial compression of two-dimensional networks and tests
+        predictions across changes in temperature, strain, and Poisson's ratio.
+      methods: [Disordered elastic networks, Structure–property relationships, Machine learning]
+      person_ids: [salman-salman, sergey-shteingoltz]
+      publication_ids: [networks-2025, gnn-2026]
 
 # PEOPLE: put portraits in public/assets/people/. Website and email are optional.
 # To remove a member from the site, remove their complete block.
