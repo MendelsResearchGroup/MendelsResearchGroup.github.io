@@ -1,5 +1,17 @@
 # Lab logos
 
+- **Active artwork:** `logo-transparent.png`, created from the supplied light
+  logo with the built-in image-editing tool. It has an alpha background and is
+  shared by the light/dark header variants. Dark mode uses a CSS color filter,
+  avoiding a colored rectangle behind the logo in any of the three designs.
+- The two older files below are retained as source/reference versions.
+
+Transparent-master prompt:
+
+> Background extraction only. Edit the provided CME Lab logo by removing its entire near-white background and making it actual alpha transparency, including all enclosed spaces inside letters and gaps between network edges and molecular ribbon shapes. Preserve the existing original logo artwork exactly: charcoal 'CME Lab', gray subtitle 'Computational Molecular' on one line and 'Engineering' on the next, thin connecting line, navy network dots and edges, and blue/teal ribbon. Do not redraw, retype, restyle, recolor, add shading, or change proportions, margins, alignment, geometry or lettering. Keep crisp flat original edges with no white matte, halos, scattered specks or background texture. Transparent PNG containing only the original logo artwork.
+
+## Original reference versions
+
 - `logo-light.png`: the original supplied lab logo, unchanged.
 - `logo-dark.png`: a dark-background color adaptation created with the built-in
   image-editing tool. Light lettering and pale-blue network details suit the dark

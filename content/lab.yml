@@ -16,8 +16,8 @@ lab:
   google_site_verification: u1L_HSkhfPU1T6R3NE9awysGe9m8nYLEwv-0-iHjRXc
   github: https://github.com/MendelsResearchGroup
   original_site: https://mendelsgroup.net.technion.ac.il/
-  logo: /assets/brand/logo-light.png
-  logo_dark: /assets/brand/logo-dark.png
+  logo: /assets/brand/logo-transparent.png
+  logo_dark: /assets/brand/logo-transparent.png
   group_photo: /assets/people/group.jpg
   group_photo_caption: The CME group at the Technion · 2024
   description: Computational molecular engineering at the Technion. We develop simulation and
@@ -128,6 +128,7 @@ people:
     name: Sergey Shteingoltz
     role: PhD Student
     image: /assets/people/sergey-shteingoltz.jpg
+    website: https://shteingolts.github.io/
     bio: >-
       Sergey joined the CME in March 2023. He earned his BSc and MSc from Kazan Federal University,
       Butlerov's Chemistry Institute (2014-2019).

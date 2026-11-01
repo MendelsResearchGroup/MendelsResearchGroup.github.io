@@ -21,10 +21,10 @@ html[data-theme='dark'] {
 }
 body { background: var(--paper); }
 .header { background: var(--paper); }
-.brand { padding: 4px; background: #fff; border-radius: 3px; }
+.brand { padding: 4px; background: transparent; border-radius: 3px; }
 .brand-dark, html[data-theme='dark'] .has-dark-logo .brand-light { display: none; }
-html[data-theme='dark'] .has-dark-logo { background: var(--paper); }
 html[data-theme='dark'] .has-dark-logo .brand-dark { display: block; }
+html[data-theme='dark'] .brand-dark[src$='logo-transparent.png'] { filter: invert(1) hue-rotate(180deg) brightness(1.25); }
 .header-actions { display: flex; align-items: center; gap: 12px; }
 .header nav { margin-left: auto; }
 .theme-toggle { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: 44px; height: 44px; padding: 10px; border: 1px solid var(--field-border); border-radius: 50%; background: var(--paper); color: var(--ink); }

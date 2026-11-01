@@ -53,7 +53,6 @@ html[data-design='editorial'] .portrait-link img { aspect-ratio: 4/3; max-height
 html[data-design='editorial'] .person-card h2 { font-size: 29px; }
 html[data-design='editorial'] .join-band { background: #244d3e; }
 html[data-design='editorial'] .join-band h2 { color: #fff; }
-html[data-design='editorial'][data-theme='dark'] .brand { background: #111b26; }
 
 /* 03 / Atlas: a precise technical atlas with a framed hero and modular grid. */
 html[data-design='atlas'] {
@@ -102,7 +101,6 @@ html[data-design='atlas'] .portrait-link img { aspect-ratio: 4/3; }
 html[data-design='atlas'] .paper-page-intro { border: 1px solid var(--line); padding: 26px; margin-top: 22px; background: var(--wash); }
 html[data-design='atlas'] .theme-toggle { border-radius: 3px; }
 html[data-design='atlas'] .join-band { background: #102e57; }
-html[data-design='atlas'][data-theme='dark'] .brand { background: #111b26; }
 
 @media (max-width: 1000px) {
   html[data-design='editorial'] .hero-current { column-gap: 36px; }

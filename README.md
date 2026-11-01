@@ -86,7 +86,7 @@ stable IDs so profile and paper links keep working.
 content/lab.yml             All editable text, people, papers, and image paths
 public/assets/people/       Portraits and group.jpg
 public/assets/papers/       Main paper figures, named by publication ID
-public/assets/brand/        logo-light.png and logo-dark.png
+public/assets/brand/        Transparent logo master and original logo variants
 public/assets/research/     Optional decorative research visual for the homepage
 ```
 
@@ -95,7 +95,9 @@ in `content/lab.yml`. Use lowercase filenames with hyphens. The leading `/assets
 path maps to `public/assets/` in the repository. Paper image paths belong under
 the paper's `overview.figure.image`; portraits use the person's `image` field.
 `lab.logo` and optional `lab.logo_dark` control the two logo variants. The logo
-switches with the active theme automatically.
+switches with the active theme automatically. Both currently use
+`logo-transparent.png`; CSS adapts its colors in dark mode while preserving its
+alpha transparency. Header containers have no background color in any design.
 
 `home.hero_visual` selects the optional homepage SVG. Remove that field to hide
 it. The current static molecular ensemble is a conceptual drawing inspired by
@@ -220,8 +222,9 @@ The biographies and positions text preserve the original website's wording, with
 whitespace normalized and contact/profile URLs presented as separate links. The
 homepage and research directions were rewritten at the lab's request around the
 recent GNN, peptide free-energy/kinetics, diffusion, and disordered-network papers;
-each research direction links to its supporting studies. The lab supplied its light logo; the dark variant is
-an image-tool adaptation with light lettering and pale-blue network lines. Paper overview pages use
+each research direction links to its supporting studies. The lab supplied the original logo;
+the active transparent master was prepared with the image-editing tool, and CSS adapts
+its colors for dark mode. Original reference files are retained. Paper overview pages use
 original abstracts and figures with source attribution and licence links. The source
 version is identified explicitly: the GNN paper links to its JCTC publication but
 reproduces the openly licensed arXiv abstract and figure. Software descriptions
