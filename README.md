@@ -163,6 +163,27 @@ pull requests build and validate without deploying. No personal token is require
 
 ## Design and discoverability
 
+### Compare three designs
+
+Append a `design` query parameter to any page:
+
+- `/?design=studio` — the contemporary sans-serif layout.
+- `/?design=editorial` — warm journal styling, serif headings, and research rows.
+- `/?design=atlas` — a framed technical atlas with modular grids.
+
+The preview bar switches designs on the current page. Internal navigation, paper
+filters, and search results retain the chosen design. Each supports the existing
+system/light/dark appearance behavior. **Exit** removes the parameter and returns
+to the default Studio presentation. A design choice lives in the URL, so sharing
+the link reproduces it without changing anybody's saved settings.
+
+The plain URL continues to use Studio. All three share `content/lab.yml`; edits
+are immediately reflected in every design. Previews use the normal page's clean
+canonical URL and are marked `noindex` by the initialization script. Content hashes
+on CSS/JS URLs ensure future updates load the matching styling and behavior.
+
+### Shared foundations
+
 The site uses the supplied CME logo, bold sans-serif typography, real group
 photography, responsive layouts, and descriptive navigation. It includes canonical
 URLs, metadata for sharing, structured organization/person/publication data,
