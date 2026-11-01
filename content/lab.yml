@@ -24,6 +24,12 @@ lab:
     machine-learning methods for molecular dynamics, free-energy landscapes, and disordered materials.
 
 home:
+  # Fourth design: the project-led Fieldnotes homepage.
+  fieldnotes_title: How can we design molecular behavior?
+  fieldnotes_introduction: >-
+    We connect learned dynamics, free-energy landscapes, and disordered materials.
+    Start with a research question, then explore the people, papers, and code behind it.
+  fieldnotes_featured_paper: gnn-2026
   # Optional decorative SVG. Remove this field to hide the homepage visual.
   hero_visual: /assets/research/molecular-ensemble.svg
   eyebrow: Computational Molecular Engineering

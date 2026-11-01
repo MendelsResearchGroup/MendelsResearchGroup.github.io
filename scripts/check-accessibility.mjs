@@ -1,7 +1,7 @@
 import {readFile} from 'node:fs/promises';
 const css=await readFile(new URL('../public/layout.css',import.meta.url),'utf8');
 const themes=await readFile(new URL('../public/themes.css',import.meta.url),'utf8');
-const designs=await readFile(new URL('../public/designs.css',import.meta.url),'utf8');
+const designs=(await readFile(new URL('../public/designs.css',import.meta.url),'utf8'))+'\n'+(await readFile(new URL('../public/fieldnotes.css',import.meta.url),'utf8'));
 const variables=block=>Object.fromEntries([...block.matchAll(/--([\w-]+):\s*(#[0-9a-fA-F]{3,6})\s*;/g)].map(m=>[m[1],m[2]]));
 const palette={...variables(css.match(/:root\s*\{([^}]+)/)[1]),...variables(themes.match(/:root\s*\{([^}]+)/)[1])};
 const dark={...palette,...variables(themes.match(/html\[data-theme='dark'\]\s*\{([^}]+)/)[1])};
@@ -12,7 +12,7 @@ const designVariables=(name,isDark=false)=>{
   return variables(designs.slice(start+selector.length).split('}')[0]);
 };
 const palettes=[['Studio light',palette],['Studio dark',dark]];
-for(const name of ['editorial','atlas']){
+for(const name of ['editorial','atlas','fieldnotes']){
   const light={...palette,...designVariables(name)};
   palettes.push([name+' light',light],[name+' dark',{...dark,...designVariables(name),...designVariables(name,true)}]);
 }

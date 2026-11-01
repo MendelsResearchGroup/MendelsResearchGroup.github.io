@@ -165,23 +165,34 @@ pull requests build and validate without deploying. No personal token is require
 
 ## Design and discoverability
 
-### Compare three designs
+### Compare four designs
 
 Append a `design` query parameter to any page:
 
 - `/?design=studio` — the contemporary sans-serif layout.
 - `/?design=editorial` — warm journal styling, serif headings, and research rows.
 - `/?design=atlas` — a framed technical atlas with modular grids.
+- `/fieldnotes/` — a separate, question-led structure with side navigation,
+  a featured study, connected projects, and a compact people directory.
+
+`/?design=fieldnotes` (or `?design=4`) also opens Fieldnotes. Each normal page has
+a corresponding `/fieldnotes/` preview, including profiles and paper abstracts.
+Its homepage heading and introduction use `home.fieldnotes_title` and
+`home.fieldnotes_introduction`. Set `home.fieldnotes_featured_paper` to the ID of
+a publication with an `overview` to choose its featured study and figure.
 
 The preview bar switches designs on the current page. Internal navigation, paper
 filters, and search results retain the chosen design. Each supports the existing
 system/light/dark appearance behavior. **Exit** removes the parameter and returns
-to the default Studio presentation. A design choice lives in the URL, so sharing
+to the default Studio presentation. In Fieldnotes it also removes the route prefix.
+A design choice lives in the URL, so sharing
 the link reproduces it without changing anybody's saved settings.
 
-The plain URL continues to use Studio. All three share `content/lab.yml`; edits
+The plain URL continues to use Studio. All four share `content/lab.yml`; edits
 are immediately reflected in every design. Previews use the normal page's clean
-canonical URL and are marked `noindex` by the initialization script. Content hashes
+canonical URL and are marked `noindex` by the initialization script. Fieldnotes
+also has a static `noindex` tag and is excluded from the sitemap and search index.
+Content hashes
 on CSS/JS URLs ensure future updates load the matching styling and behavior.
 
 ### Shared foundations

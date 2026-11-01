@@ -1,9 +1,13 @@
 const designPreview=document.documentElement.dataset.designPreview==='true';
 const activeDesign=document.documentElement.dataset.design||'studio';
+const canonicalPath=path=>path.startsWith('/fieldnotes/')?path.slice('/fieldnotes'.length):path;
 function withDesign(href){
   if(!designPreview)return href;
   const url=new URL(href,location.href);
-  if(url.origin===location.origin&&(url.pathname.endsWith('/')||url.pathname.endsWith('.html')))url.searchParams.set('design',activeDesign);
+  if(url.origin===location.origin&&(url.pathname.endsWith('/')||url.pathname.endsWith('.html'))){
+    if(activeDesign==='fieldnotes'){url.pathname='/fieldnotes'+canonicalPath(url.pathname);url.searchParams.delete('design');}
+    else url.searchParams.set('design',activeDesign);
+  }
   return url.origin===location.origin?url.pathname+url.search+url.hash:href;
 }
 function updateDesignLinks(){
@@ -14,11 +18,13 @@ function updateDesignLinks(){
     a.setAttribute('href',withDesign(raw));
   }
   for(const a of document.querySelectorAll('[data-design-option]')){
-    const url=new URL(location.href);url.searchParams.set('design',a.dataset.designOption);
+    const url=new URL(location.href);url.pathname=canonicalPath(url.pathname);
+    if(a.dataset.designOption==='fieldnotes'){url.pathname='/fieldnotes'+url.pathname;url.searchParams.delete('design');}
+    else url.searchParams.set('design',a.dataset.designOption);
     a.href=url.pathname+url.search+url.hash;
     if(a.dataset.designOption===activeDesign)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
   }
-  const exit=document.querySelector('.design-exit'),url=new URL(location.href);url.searchParams.delete('design');
+  const exit=document.querySelector('.design-exit'),url=new URL(location.href);url.pathname=canonicalPath(url.pathname);url.searchParams.delete('design');
   if(exit)exit.href=url.pathname+url.search+url.hash;
 }
 updateDesignLinks();

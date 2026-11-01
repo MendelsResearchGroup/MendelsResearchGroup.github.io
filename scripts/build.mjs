@@ -4,10 +4,11 @@ import { resolve, dirname } from 'node:path';
 import { parseDocument } from 'yaml';
 import { pageMetadata } from './metadata.mjs';
 import { createHash } from 'node:crypto';
+import { fieldnotesDocument } from './fieldnotes.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const out = resolve(root, 'dist');
-const assetVersions=new Map(await Promise.all(['theme-init.js','app.js','layout.css','themes.css','designs.css'].map(async name=>[name,createHash('sha256').update(await readFile(resolve(root,'public',name))).digest('hex').slice(0,12)])));
+const assetVersions=new Map(await Promise.all(['theme-init.js','app.js','layout.css','themes.css','designs.css','fieldnotes.css'].map(async name=>[name,createHash('sha256').update(await readFile(resolve(root,'public',name))).digest('hex').slice(0,12)])));
 const assetPath=name=>'/'+name+'?v='+assetVersions.get(name);
 const document = parseDocument(await readFile(resolve(root, 'content/lab.yml'), 'utf8'), { uniqueKeys: true });
 if (document.errors.length) throw new Error('content/lab.yml: ' + document.errors.map(e => e.message).join('\n'));
@@ -57,6 +58,7 @@ for (const area of d.research.areas) {
   if (!Array.isArray(area.publication_ids)) fail(`${area.id}.publication_ids`, 'provide a list, or [] for no related papers');
   for (const id of area.publication_ids) if (!d.publications.some(p => p.id === id)) fail(`${area.id}.publication_ids`, `unknown publication "${id}"`);
 }
+if(d.home.fieldnotes_featured_paper&&!d.publications.some(p=>p.id===d.home.fieldnotes_featured_paper&&p.overview))fail('home.fieldnotes_featured_paper','choose a publication ID with an overview');
 const images = [d.lab.logo, ...(d.lab.logo_dark?[d.lab.logo_dark]:[]), ...(d.home.hero_visual?[d.home.hero_visual]:[]), d.lab.group_photo, ...d.people.map(p => p.image), ...d.publications.filter(p=>p.overview).map(p=>p.overview.figure.image)];
 for (const image of images) {
   if (typeof image !== 'string' || !/^\/assets\/(?:[a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_-][a-zA-Z0-9_.-]*\.(?:jpg|jpeg|png|webp|svg)$/.test(image)) fail('image', 'use a file within /assets/');
@@ -88,12 +90,12 @@ async function page(path, title, description, body, structured, indexText='') {
     <script src="${assetPath('theme-init.js')}"></script>
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="${assetPath('layout.css')}"><link rel="stylesheet" href="${assetPath('themes.css')}"><link rel="stylesheet" href="${assetPath('designs.css')}">
+    <link rel="stylesheet" href="${assetPath('layout.css')}"><link rel="stylesheet" href="${assetPath('themes.css')}"><link rel="stylesheet" href="${assetPath('designs.css')}"><link rel="stylesheet" href="${assetPath('fieldnotes.css')}">
     <script type="application/ld+json">${json(metadata.structured)}</script><script src="${assetPath('app.js')}" defer></script>
     <noscript><style>.menu-toggle{display:none}.header nav{display:flex;position:static;flex-wrap:wrap;box-shadow:none;width:100%}.header-inner{flex-wrap:wrap;padding-block:12px}</style></noscript>
   </head><body>
     <a class="skip" href="#main">Skip to content</a>
-    <nav class="design-preview" aria-label="Compare website designs"><div class="wrap design-preview-inner"><span class="design-preview-label">Compare designs</span><div class="design-options"><a href="?design=studio" data-design-option="studio">01 Studio</a><a href="?design=editorial" data-design-option="editorial">02 Editorial</a><a href="?design=atlas" data-design-option="atlas">03 Atlas</a></div><a class="design-exit" href="${e(path)}" aria-label="Exit design preview">Exit</a></div></nav>
+    <nav class="design-preview" aria-label="Compare website designs"><div class="wrap design-preview-inner"><span class="design-preview-label">Compare designs</span><div class="design-options"><a href="?design=studio" data-design-option="studio">01 Studio</a><a href="?design=editorial" data-design-option="editorial">02 Editorial</a><a href="?design=atlas" data-design-option="atlas">03 Atlas</a><a href="/fieldnotes${e(path)}" data-design-option="fieldnotes">04 Fieldnotes</a></div><a class="design-exit" href="${e(path)}" aria-label="Exit design preview">Exit</a></div></nav>
     <header class="header"><div class="wrap header-inner">
       <a class="brand${d.lab.logo_dark?' has-dark-logo':''}" href="/" aria-label="${e(d.lab.name)} home"><img class="brand-light" src="${e(d.lab.logo)}" width="2170" height="725" alt="${e(d.lab.name)} — Computational Molecular Engineering">${d.lab.logo_dark?`<img class="brand-dark" src="${e(d.lab.logo_dark)}" width="2170" height="725" alt="${e(d.lab.name)} — Computational Molecular Engineering">`:''}</a>
       <nav id="primary-nav" aria-label="Main navigation">${nav}<a class="search-nav" href="/search/" aria-label="Search the website"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m15 15 5 5" stroke="currentColor" stroke-width="1.6"/></svg></a></nav>
@@ -104,6 +106,9 @@ async function page(path, title, description, body, structured, indexText='') {
   const dir = resolve(out, '.'+path);
   await mkdir(dir,{recursive:true});
   await writeFile(resolve(dir,'index.html'),html);
+  const fourthDir=resolve(out,'fieldnotes','.'+path);
+  await mkdir(fourthDir,{recursive:true});
+  await writeFile(resolve(fourthDir,'index.html'),fieldnotesDocument({data:d,publications,path,title,head:html.slice(0,html.indexOf('</head>')),body}));
   if (path !== '/search/' && path !== '/404/') searchIndex.push({title, url:path, category: path==='/'?'The lab':path.split('/')[1], text:description+' '+indexText});
 }
 function intro(kicker,title,description) {return `<section class="page-intro wrap"><p class="eyebrow">${e(kicker)}</p><h1>${e(title)}</h1>${description?`<p class="intro-copy">${e(description)}</p>`:''}</section>`;}
@@ -178,4 +183,4 @@ await writeFile(resolve(out,'robots.txt'),`User-agent: *\nAllow: /\nSitemap: ${b
 await writeFile(resolve(out,'.nojekyll'),'');
 await page('/404/','Page not found','Find your way back to the CME Lab website.',`${intro('404','Page not found','The page you are looking for may have moved.')}<div class="wrap error-actions">${link('/','Return home','button')}${link('/search/','Search the site')}</div>`);
 await cp(resolve(out,'404/index.html'),resolve(out,'404.html'));
-console.log(`Built ${urls.length+1} pages, ${d.people.length} people, and ${publications.length} publications from content/lab.yml.`);
+console.log(`Built ${urls.length+1} canonical pages and ${urls.length+1} Fieldnotes previews, ${d.people.length} people, and ${publications.length} publications from content/lab.yml.`);
