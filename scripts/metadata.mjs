@@ -7,7 +7,7 @@ export function pageMetadata({data:d,base,path,title,description,entity}) {
   const canonical=base+path;
   const homeTitle=`${d.lab.name} | ${d.lab.group} | ${d.lab.institution.split('—')[0].trim()}`;
   const documentTitle=path==='/'?homeTitle:`${title} · ${d.lab.name}`;
-  const indexable=!['/search/','/404/'].includes(path);
+  const indexable=!['/search/','/404/','/vote/'].includes(path);
   const labId=base+'/#lab', siteId=base+'/#website', pageId=canonical+'#webpage';
   const lab={'@type':'ResearchOrganization','@id':labId,name:d.lab.full_name,alternateName:[d.lab.name,d.lab.group],url:base+'/',logo:base+d.lab.logo,description:d.lab.description,email:d.lab.email,location:{'@type':'Place',name:d.lab.location},parentOrganization:{'@type':'CollegeOrUniversity',name:d.lab.institution},sameAs:[d.lab.original_site,d.lab.github]};
   const site={'@type':'WebSite','@id':siteId,url:base+'/',name:d.lab.name,alternateName:d.lab.group,publisher:{'@id':labId},inLanguage:'en'};

@@ -35,7 +35,7 @@ for(const file of files){
 }
 for(const name of ['sitemap.xml','robots.txt','search-index.json','404.html'])try{await access(resolve(root,name));}catch{errors.push(`Missing ${name}`);}
 const index=JSON.parse(await readFile(resolve(root,'search-index.json'),'utf8'));
-for(const path of ['search/index.html','404.html'])if(!(await readFile(resolve(root,path),'utf8')).includes('name="robots" content="noindex, follow"'))errors.push(`${path}: should not be indexed`);
+for(const path of ['search/index.html','404.html','vote/index.html'])if(!(await readFile(resolve(root,path),'utf8')).includes('name="robots" content="noindex, follow"'))errors.push(`${path}: should not be indexed`);
 if((await readFile(resolve(root,'sitemap.xml'),'utf8')).includes('/search/'))errors.push('Internal search should not be in the sitemap');
 if((await readFile(resolve(root,'sitemap.xml'),'utf8')).includes('/fieldnotes/'))errors.push('Design previews should not be in the sitemap');
 for(const item of index){const url=new URL(item.url,'https://example.org');let target=resolve(root,'.'+url.pathname);if(url.pathname.endsWith('/'))target=resolve(target,'index.html');try{await access(target);}catch{errors.push(`Search result points to a missing page: ${item.url}`);}}

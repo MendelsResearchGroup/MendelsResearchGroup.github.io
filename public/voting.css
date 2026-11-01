@@ -1,0 +1,44 @@
+.ballot { max-width: 900px; padding-block: 36px 50px; }
+.ballot-heading { max-width: 700px; }
+.ballot-heading h1 { font-size: clamp(30px,4vw,44px); margin-top: 12px; line-height: 1.15; }
+.ballot-heading > p:not(.eyebrow) { font-size: 16px; color: var(--muted); margin-top: 16px; line-height: 1.7; }
+.ballot-heading .ballot-note { font-size: 13px!important; }
+.ballot-status { padding: 16px 0; color: var(--ink); font-weight: 550; min-height: 58px; }
+.ballot-status:empty { display: none; }
+.ballot fieldset { padding: 0; border: 0; margin: 0; min-width: 0; }
+.ballot legend { font-size: 18px; font-weight: 600; margin-bottom: 18px; }
+.ballot-options { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+.ballot-option { border: 1px solid var(--field-border); border-radius: 6px; padding: 18px; }
+.ballot-option:has(input:checked) { background: var(--wash); box-shadow: inset 0 0 0 1px var(--teal); }
+.ballot-option:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 3px; }
+.ballot-option label { display: flex; gap: 12px; align-items: center; min-height: 44px; font-size: 20px; cursor: pointer; line-height: 1.5; }
+.ballot-option input { appearance: auto; width: 20px; height: 20px; min-width: 20px; padding: 0; margin: 0; accent-color: var(--teal); }
+.ballot-number { font-size: 12px; color: var(--muted); margin-right: 10px; }
+.ballot-option p { font-size: 14px; color: var(--muted); margin-top: 10px; line-height: 1.7; }
+.ballot-option > a { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; font-size: 13px; margin-top: 8px; }
+#vote-submit { margin-top: 24px; min-height: 44px; }
+.ballot button:disabled { cursor: wait; }
+.ballot-result-actions { margin-top: 20px; }
+.ballot-result-actions button { min-height: 44px; padding: 8px 0; background: transparent; border: 0; color: var(--teal); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; font: inherit; font-size: 14px; }
+.ballot-results { margin-top: 26px; padding-top: 24px; border-top: 1px solid var(--line); max-width: 700px; }
+.ballot-results h2 { font-size: 26px; }
+.ballot-results > p { color: var(--muted); font-size: 14px; margin-top: 8px; }
+.ballot-results ol { padding: 0; list-style: none; margin-top: 22px; }
+.ballot-results li { padding-block: 12px; }
+.ballot-results li > div:first-child { display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: 14px; }
+.ballot-results strong { font-weight: 550; }
+.ballot-count { color: var(--muted); font-size: 13px; }
+.ballot-bar { height: 8px; background: var(--wash); margin-top: 10px; border-radius: 4px; overflow: hidden; }
+.ballot-bar span { display: block; width: 0; height: 100%; background: var(--teal); }
+.ballot-fineprint { max-width: 700px; font-size: 12px!important; color: var(--muted); margin-top: 32px; line-height: 1.7!important; }
+.design-preview-actions { display: flex; align-items: center; gap: 4px; }
+.design-vote { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 8px 12px; font: 12px/1.4 var(--sans); text-decoration: none; color: var(--teal); border: 1px solid var(--field-border); border-radius: 3px; }
+.design-vote:hover { color: var(--ink); background: var(--wash); }
+@media(max-width:600px) {
+  .ballot-options { grid-template-columns: 1fr; }
+  .ballot-option { padding: 16px; }
+  .ballot-results li > div:first-child { align-items: start; }
+  .ballot-count { text-align: right; }
+  .design-preview-actions { grid-column: 2; grid-row: 1; }
+  .design-preview-actions .design-exit { padding-inline: 8px; }
+}

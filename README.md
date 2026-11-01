@@ -195,6 +195,30 @@ also has a static `noindex` tag and is excluded from the sitemap and search inde
 Content hashes
 on CSS/JS URLs ensure future updates load the matching styling and behavior.
 
+### Lab design vote
+
+Share `https://mendelsresearchgroup.github.io/vote/` with labmates. The four design
+previews also have a **Vote** link in their comparison bar. No sign-in is required.
+The ballot remembers a random browser ID and the submitted choice in
+`localStorage` under `cme-design-vote:website-design-2026-11`. It marks a vote only
+after the shared counter confirms it. Retrying the same browser ID never adds a
+second vote. Clearing browser data, private browsing, or changing browsers allows
+another vote; this is an informal lab poll.
+
+The lab website stays on GitHub Pages. A small separate Sites service stores the
+shared totals in Cloudflare D1. The application database stores a hash of the
+random browser ID, the choice, the poll ID, and submission time. It does not store
+names, email addresses, or IP addresses. Hosting logs are managed separately by
+the host. The public endpoint returns only aggregate totals.
+
+Edit `voting.title` and `voting.introduction` in `content/lab.yml` to change the
+ballot text. Set `voting.enabled: false` to hide the preview-bar Vote link and close
+the visible ballot. `voting.endpoint` points to the shared counter. Keep
+`voting.poll_id` unchanged unless starting a new poll in both the counter and the
+website. The ballot and its Fieldnotes counterpart are excluded from Google
+indexing, the sitemap, and site search. The counter source is maintained as the
+separate **CME Lab · Website design vote** Site.
+
 ### Shared foundations
 
 The site uses the supplied CME logo, bold sans-serif typography, real group

@@ -14,7 +14,7 @@ function updateDesignLinks(){
   if(!designPreview)return;
   for(const a of document.querySelectorAll('a[href]')){
     const raw=a.getAttribute('href');
-    if(a.closest('.design-preview')||raw.startsWith('#'))continue;
+    if(a.closest('.design-preview')||a.hasAttribute('data-design-choice-link')||raw.startsWith('#'))continue;
     a.setAttribute('href',withDesign(raw));
   }
   for(const a of document.querySelectorAll('[data-design-option]')){
@@ -26,6 +26,8 @@ function updateDesignLinks(){
   }
   const exit=document.querySelector('.design-exit'),url=new URL(location.href);url.pathname=canonicalPath(url.pathname);url.searchParams.delete('design');
   if(exit)exit.href=url.pathname+url.search+url.hash;
+  const vote=document.querySelector('[data-vote-link]');
+  if(vote)vote.href=withDesign('/vote/');
 }
 updateDesignLinks();
 const themeToggle=document.querySelector('.theme-toggle');
