@@ -6,10 +6,12 @@ import { pageMetadata } from './metadata.mjs';
 import { createHash } from 'node:crypto';
 import { fieldnotesDocument } from './fieldnotes.mjs';
 import { votingBody } from './voting.mjs';
+import {classicDocument} from './classic.mjs';
+import {classicDesigns} from './classic-designs.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const out = resolve(root, 'dist');
-const assetVersions=new Map(await Promise.all(['theme-init.js','app.js','layout.css','themes.css','designs.css','fieldnotes.css','voting.css','voting.js'].map(async name=>[name,createHash('sha256').update(await readFile(resolve(root,'public',name))).digest('hex').slice(0,12)])));
+const assetVersions=new Map(await Promise.all(['theme-init.js','app.js','layout.css','themes.css','designs.css','fieldnotes.css','voting.css','voting.js','classic.css'].map(async name=>[name,createHash('sha256').update(await readFile(resolve(root,'public',name))).digest('hex').slice(0,12)])));
 const assetPath=name=>'/'+name+'?v='+assetVersions.get(name);
 const document = parseDocument(await readFile(resolve(root, 'content/lab.yml'), 'utf8'), { uniqueKeys: true });
 if (document.errors.length) throw new Error('content/lab.yml: ' + document.errors.map(e => e.message).join('\n'));
@@ -24,6 +26,7 @@ for (const [section, fields] of Object.entries({ lab: ['name','full_name','group
 if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.lab.email)) fail('lab.email', 'provide an email address');
 for (const k of ['site_url','github','original_site']) url(d.lab[k], `lab.${k}`);
 if(d.voting){object(d.voting,'voting');if(typeof d.voting.enabled!=='boolean')fail('voting.enabled','use true or false');for(const k of ['poll_id','title','introduction'])text(d.voting[k],'voting.'+k);url(d.voting.endpoint,'voting.endpoint');}
+if(d.voting?.web2){object(d.voting.web2,'voting.web2');if(typeof d.voting.web2.enabled!=='boolean')fail('voting.web2.enabled','use true or false');for(const k of ['poll_id','title','introduction'])text(d.voting.web2[k],'voting.web2.'+k);url(d.voting.web2.endpoint,'voting.web2.endpoint');}
 if (d.lab.google_site_verification && (typeof d.lab.google_site_verification!=='string'||!(/^[A-Za-z0-9_-]+$/).test(d.lab.google_site_verification))) fail('lab.google_site_verification','use only the token from Google, without the surrounding HTML tag');
 for (const path of ['people','publications','research.areas','software.projects','positions.backgrounds']) list(path.split('.').reduce((v,k) => v?.[k], d), path);
 for (const [collection, fields] of [[d.people,['id','name','role','image','bio']], [d.publications,['id','title','authors','venue','type','url']], [d.research.areas,['id','number','title','summary','question','description','example']], [d.software.projects,['name','category','description','url']]]) {
@@ -92,7 +95,7 @@ async function page(path, title, description, body, structured, indexText='') {
     <script src="${assetPath('theme-init.js')}"></script>
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="${assetPath('layout.css')}"><link rel="stylesheet" href="${assetPath('themes.css')}"><link rel="stylesheet" href="${assetPath('designs.css')}"><link rel="stylesheet" href="${assetPath('fieldnotes.css')}"><link rel="stylesheet" href="${assetPath('voting.css')}">
+    <link rel="stylesheet" href="${assetPath('layout.css')}"><link rel="stylesheet" href="${assetPath('themes.css')}"><link rel="stylesheet" href="${assetPath('designs.css')}"><link rel="stylesheet" href="${assetPath('fieldnotes.css')}"><link rel="stylesheet" href="${assetPath('voting.css')}"><link rel="stylesheet" href="${assetPath('classic.css')}">
     ${path==='/vote/'?`<script type="module" src="${assetPath('voting.js')}"></script>`:''}
     <script type="application/ld+json">${json(metadata.structured)}</script><script src="${assetPath('app.js')}" defer></script>
     <noscript><style>.menu-toggle{display:none}.header nav{display:flex;position:static;flex-wrap:wrap;box-shadow:none;width:100%}.header-inner{flex-wrap:wrap;padding-block:12px}</style></noscript>
@@ -112,6 +115,11 @@ async function page(path, title, description, body, structured, indexText='') {
   const fourthDir=resolve(out,'fieldnotes','.'+path);
   await mkdir(fourthDir,{recursive:true});
   await writeFile(resolve(fourthDir,'index.html'),fieldnotesDocument({data:d,publications,path,title,head:html.slice(0,html.indexOf('</head>')),body}));
+  for(const {id:design} of classicDesigns){
+    const classicDir=resolve(out,'classic',design,'.'+path);
+    await mkdir(classicDir,{recursive:true});
+    await writeFile(resolve(classicDir,'index.html'),classicDocument({data:d,publications,path,title,head:html.slice(0,html.indexOf('</head>')),body,design}));
+  }
   if (!['/search/','/404/','/vote/'].includes(path)) searchIndex.push({title, url:path, category: path==='/'?'The lab':path.split('/')[1], text:description+' '+indexText});
 }
 function intro(kicker,title,description) {return `<section class="page-intro wrap"><p class="eyebrow">${e(kicker)}</p><h1>${e(title)}</h1>${description?`<p class="intro-copy">${e(description)}</p>`:''}</section>`;}
@@ -187,4 +195,4 @@ await writeFile(resolve(out,'robots.txt'),`User-agent: *\nAllow: /\nSitemap: ${b
 await writeFile(resolve(out,'.nojekyll'),'');
 await page('/404/','Page not found','Find your way back to the CME Lab website.',`${intro('404','Page not found','The page you are looking for may have moved.')}<div class="wrap error-actions">${link('/','Return home','button')}${link('/search/','Search the site')}</div>`);
 await cp(resolve(out,'404/index.html'),resolve(out,'404.html'));
-console.log(`Built ${urls.length+1} canonical pages and ${urls.length+1} Fieldnotes previews, ${d.people.length} people, and ${publications.length} publications from content/lab.yml.`);
+console.log(`Built ${urls.length+1} canonical pages and five full preview sites, ${d.people.length} people, and ${publications.length} publications from content/lab.yml.`);

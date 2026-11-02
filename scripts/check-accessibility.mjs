@@ -1,7 +1,7 @@
 import {readFile} from 'node:fs/promises';
 const css=await readFile(new URL('../public/layout.css',import.meta.url),'utf8');
 const themes=await readFile(new URL('../public/themes.css',import.meta.url),'utf8');
-const designs=(await readFile(new URL('../public/designs.css',import.meta.url),'utf8'))+'\n'+(await readFile(new URL('../public/fieldnotes.css',import.meta.url),'utf8'));
+const designs=(await readFile(new URL('../public/designs.css',import.meta.url),'utf8'))+'\n'+(await readFile(new URL('../public/fieldnotes.css',import.meta.url),'utf8'))+'\n'+(await readFile(new URL('../public/classic.css',import.meta.url),'utf8'));
 const variables=block=>Object.fromEntries([...block.matchAll(/--([\w-]+):\s*(#[0-9a-fA-F]{3,6})\s*;/g)].map(m=>[m[1],m[2]]));
 const palette={...variables(css.match(/:root\s*\{([^}]+)/)[1]),...variables(themes.match(/:root\s*\{([^}]+)/)[1])};
 const dark={...palette,...variables(themes.match(/html\[data-theme='dark'\]\s*\{([^}]+)/)[1])};
@@ -12,7 +12,7 @@ const designVariables=(name,isDark=false)=>{
   return variables(designs.slice(start+selector.length).split('}')[0]);
 };
 const palettes=[['Studio light',palette],['Studio dark',dark]];
-for(const name of ['editorial','atlas','fieldnotes']){
+for(const name of ['editorial','atlas','fieldnotes','academic','institute','review','handbook']){
   const light={...palette,...designVariables(name)};
   palettes.push([name+' light',light],[name+' dark',{...dark,...designVariables(name),...designVariables(name,true)}]);
 }
@@ -32,6 +32,7 @@ for(const [name,p]of palettes){
   const pairs=[];
   for(const foreground of ['ink','muted','teal','blue'])for(const background of ['paper','wash'])pairs.push([foreground+'/'+background,p[foreground],p[background],4.5]);
   pairs.push(['button',p['button-text'],p['button-bg'],4.5],['button hover',p.paper,p.teal,4.5],['focus',p.focus,p.paper,3],['field border',p['field-border'],p.paper,3]);
+  if(p['nav-bg'])pairs.push(['navigation gradient top',p['nav-text'],p['nav-bg'],4.5],['navigation gradient bottom',p['nav-text'],p['nav-edge'],4.5]);
   for(const [label,foreground,background,minimum]of pairs){const ratio=contrast(foreground,background);if(ratio<minimum)failures.push(`${name} ${label}: ${ratio.toFixed(2)}:1 is below ${minimum}:1`);}
   console.log(`${name}: minimum palette text contrast ${Math.min(...pairs.filter(x=>x[3]===4.5).map(x=>contrast(x[1],x[2]))).toFixed(2)}:1`);
 }

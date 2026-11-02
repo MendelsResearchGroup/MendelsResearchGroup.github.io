@@ -2,7 +2,8 @@ const root=document.querySelector('[data-vote-endpoint]');
 if(root){
   const endpoint=root.dataset.voteEndpoint,pollId=root.dataset.pollId,key='cme-design-vote:'+pollId;
   const form=document.querySelector('#design-vote-form'),fieldset=form.querySelector('fieldset'),submit=document.querySelector('#vote-submit'),status=document.querySelector('#vote-status'),retry=document.querySelector('#vote-retry'),results=document.querySelector('#vote-results'),show=document.querySelector('#vote-show-results'),refresh=document.querySelector('#vote-refresh-results');
-  const names={studio:'Studio',editorial:'Editorial',atlas:'Atlas',fieldnotes:'Fieldnotes'};
+  const optionNames=Object.fromEntries([...root.querySelectorAll('[data-vote-choice][data-vote-name]')].map(row=>[row.dataset.voteChoice,row.dataset.voteName]));
+  const names=Object.keys(optionNames).length?optionNames:{studio:'Studio',editorial:'Editorial',atlas:'Atlas',fieldnotes:'Fieldnotes'};
   let record,storageAvailable=true,pending=false,revision=0;
   function readRecord(){try{const saved=JSON.parse(localStorage.getItem(key)||'null');if(saved&&typeof saved.voterId==='string'&&/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/i.test(saved.voterId))return {voterId:saved.voterId,...(Object.hasOwn(names,saved.choice)?{choice:saved.choice}:{})};}catch{}return null;}
   function save(){try{localStorage.setItem(key,JSON.stringify(record));}catch{storageAvailable=false;}}

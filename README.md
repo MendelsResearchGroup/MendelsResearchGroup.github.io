@@ -165,7 +165,28 @@ pull requests build and validate without deploying. No personal token is require
 
 ## Design and discoverability
 
-### Compare four designs
+### New traditional academic designs
+
+The second set has separate, complete page layouts with conventional academic
+typography, framed pages, compact navigation, and visible research information:
+
+- `/classic/academic/` — navy university navigation and a faculty sidebar.
+- `/classic/institute/` — an institutional portal with a left site menu and recent papers.
+- `/classic/review/` — a journal-style masthead and a featured research article.
+- `/classic/handbook/` — green tabs and an indexed research directory.
+
+Each route mirrors every public page, including people, papers, search, and voting.
+The switcher retains the current page, query, and section. Query shortcuts such as
+`/?design=academic` also work. Use **Previous designs** to return to the first set.
+All text, figures, people, and paper abstracts still come from `content/lab.yml`.
+
+The new ballot is `/classic/academic/vote/` (available in all four layouts).
+It uses `voting.web2` in the same YAML file and a separate poll ID and counter
+endpoint. Original votes and browser reminders remain intact. New academic
+previews have a static `noindex` tag and are excluded from the sitemap and search
+index; the normal site's canonical URLs remain unchanged.
+
+### Original four designs
 
 Append a `design` query parameter to any page:
 

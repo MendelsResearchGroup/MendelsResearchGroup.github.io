@@ -31,6 +31,15 @@ voting:
   introduction: >-
     Explore the four designs, then vote for the one you would like us to use.
     The previews open in a new tab, so you can return here when you are ready.
+  # Separate ballot for the second, traditional academic design set.
+  web2:
+    enabled: true
+    poll_id: website-design-2026-11-web2
+    endpoint: https://mendels-design-vote.jilkinalex.chatgpt.site/api/votes/classic
+    title: Choose a new academic design.
+    introduction: >-
+      Compare Academic, Institute, Research Review, and Lab Handbook.
+      This ballot is separate from the earlier design vote.
 
 home:
   # Fourth design: the project-led Fieldnotes homepage.

@@ -1,11 +1,13 @@
 const designPreview=document.documentElement.dataset.designPreview==='true';
 const activeDesign=document.documentElement.dataset.design||'studio';
-const canonicalPath=path=>path.startsWith('/fieldnotes/')?path.slice('/fieldnotes'.length):path;
+const classicDesigns=['academic','institute','review','handbook'];
+const canonicalPath=path=>path.replace(/^\/classic\/(academic|institute|review|handbook)(?=\/)/,'').replace(/^\/fieldnotes(?=\/)/,'');
 function withDesign(href){
   if(!designPreview)return href;
   const url=new URL(href,location.href);
   if(url.origin===location.origin&&(url.pathname.endsWith('/')||url.pathname.endsWith('.html'))){
-    if(activeDesign==='fieldnotes'){url.pathname='/fieldnotes'+canonicalPath(url.pathname);url.searchParams.delete('design');}
+    if(classicDesigns.includes(activeDesign)){url.pathname='/classic/'+activeDesign+canonicalPath(url.pathname);url.searchParams.delete('design');}
+    else if(activeDesign==='fieldnotes'){url.pathname='/fieldnotes'+canonicalPath(url.pathname);url.searchParams.delete('design');}
     else url.searchParams.set('design',activeDesign);
   }
   return url.origin===location.origin?url.pathname+url.search+url.hash:href;
@@ -19,7 +21,8 @@ function updateDesignLinks(){
   }
   for(const a of document.querySelectorAll('[data-design-option]')){
     const url=new URL(location.href);url.pathname=canonicalPath(url.pathname);
-    if(a.dataset.designOption==='fieldnotes'){url.pathname='/fieldnotes'+url.pathname;url.searchParams.delete('design');}
+    if(classicDesigns.includes(a.dataset.designOption)){url.pathname='/classic/'+a.dataset.designOption+url.pathname;url.searchParams.delete('design');}
+    else if(a.dataset.designOption==='fieldnotes'){url.pathname='/fieldnotes'+url.pathname;url.searchParams.delete('design');}
     else url.searchParams.set('design',a.dataset.designOption);
     a.href=url.pathname+url.search+url.hash;
     if(a.dataset.designOption===activeDesign)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
@@ -28,6 +31,8 @@ function updateDesignLinks(){
   if(exit)exit.href=url.pathname+url.search+url.hash;
   const vote=document.querySelector('[data-vote-link]');
   if(vote)vote.href=withDesign('/vote/');
+  const previous=document.querySelector('.design-previous');
+  if(previous){const url=new URL(location.href);url.pathname=canonicalPath(url.pathname);url.searchParams.set('design','studio');previous.href=url.pathname+url.search+url.hash;}
 }
 updateDesignLinks();
 const themeToggle=document.querySelector('.theme-toggle');
