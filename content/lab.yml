@@ -48,6 +48,32 @@ home:
     We connect learned dynamics, free-energy landscapes, and disordered materials.
     Start with a research question, then explore the people, papers, and code behind it.
   fieldnotes_featured_paper: gnn-2026
+  # Contemporary homepage spotlight. Change paper_id to an existing publication ID.
+  # Remove this entire spotlight block to hide the feature.
+  spotlight:
+    paper_id: peptide-surface-2026
+    title: Guiding peptide stability with short simulations
+    finding: >-
+      In CLN025, collective variables learned from short simulations help identify sites
+      where mutations tend to stabilize or destabilize the folded peptide.
+    figure:
+      image: /assets/papers/peptide-surface-2026-result.jpg
+      number: Figure 3
+      caption: >-
+        Residue-level weights versus site-averaged changes in melting temperature (left),
+        and the weights at each residue (right).
+      alt: >-
+        In CLN025, larger wild-type HLDA residue weights correspond to more negative
+        site-averaged mutation-induced changes in melting temperature. The second panel
+        compares the normalized weights at each residue.
+      source: https://pmc.ncbi.nlm.nih.gov/articles/PMC13418176/#fig3
+      license: CC BY 4.0
+      license_url: https://creativecommons.org/licenses/by/4.0/
+      credit: >-
+        © 2026 Muralika Medaparambath, Alexander Zhilkin, and Dan Mendels.
+        Published by the American Chemical Society. Reproduced without alteration.
+      width: 696
+      height: 293
   # Optional decorative SVG. Remove this field to hide the homepage visual.
   hero_visual: /assets/research/molecular-ensemble.svg
   eyebrow: Computational Molecular Engineering

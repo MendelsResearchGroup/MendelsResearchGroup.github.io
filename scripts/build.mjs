@@ -65,7 +65,18 @@ for (const area of d.research.areas) {
   for (const id of area.publication_ids) if (!d.publications.some(p => p.id === id)) fail(`${area.id}.publication_ids`, `unknown publication "${id}"`);
 }
 if(d.home.fieldnotes_featured_paper&&!d.publications.some(p=>p.id===d.home.fieldnotes_featured_paper&&p.overview))fail('home.fieldnotes_featured_paper','choose a publication ID with an overview');
-const images = [d.lab.logo, ...(d.lab.logo_dark?[d.lab.logo_dark]:[]), ...(d.home.hero_visual?[d.home.hero_visual]:[]), d.lab.group_photo, ...d.people.map(p => p.image), ...d.publications.filter(p=>p.overview).map(p=>p.overview.figure.image)];
+if(d.home.spotlight){
+  const s=d.home.spotlight;
+  object(s,'home.spotlight');
+  for(const k of ['paper_id','title','finding'])text(s[k],'home.spotlight.'+k);
+  if(!d.publications.some(p=>p.id===s.paper_id&&p.overview))fail('home.spotlight.paper_id','choose a publication ID with an overview');
+  const f=s.figure;
+  object(f,'home.spotlight.figure');
+  for(const k of ['image','alt','number','caption','source','credit','license','license_url'])text(f[k],'home.spotlight.figure.'+k);
+  for(const k of ['source','license_url'])url(f[k],'home.spotlight.figure.'+k);
+  if(!Number.isInteger(f.width)||!Number.isInteger(f.height)||f.width<1||f.height<1)fail('home.spotlight.figure','provide positive width and height values');
+}
+const images = [d.lab.logo, ...(d.lab.logo_dark?[d.lab.logo_dark]:[]), ...(d.home.hero_visual?[d.home.hero_visual]:[]), ...(d.home.spotlight?[d.home.spotlight.figure.image]:[]), d.lab.group_photo, ...d.people.map(p => p.image), ...d.publications.filter(p=>p.overview).map(p=>p.overview.figure.image)];
 for (const image of images) {
   if (typeof image !== 'string' || !/^\/assets\/(?:[a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_-][a-zA-Z0-9_.-]*\.(?:jpg|jpeg|png|webp|svg)$/.test(image)) fail('image', 'use a file within /assets/');
   try { await access(resolve(root, 'public', image.slice(1))); } catch { fail(image, 'image file is missing from public/assets/'); }

@@ -183,6 +183,14 @@ Body text is 16px and secondary text is at least 14px at the default browser
 font size. The preview uses relative font sizes so reader font preferences scale
 the text; narrow member biographies flow beneath the portraits.
 
+The homepage's research spotlight is edited in `home.spotlight` in `content/lab.yml`.
+Set `paper_id` to an existing publication ID, then supply a short `title`, one
+factual `finding`, and the result `figure` with its caption, alternative text,
+dimensions, source, and license. Put the image in `public/assets/papers/`.
+The paper and code links come from that publication's existing entry. Remove
+the complete `home.spotlight` block to hide the feature. The original paper
+overview and abstract stay in the publication entry.
+
 Design guardrails for future edits:
 
 - Do not number navigation, research themes, or software for decoration.
