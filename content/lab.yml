@@ -51,29 +51,30 @@ home:
   # Contemporary homepage spotlight. Change paper_id to an existing publication ID.
   # Remove this entire spotlight block to hide the feature.
   spotlight:
-    paper_id: peptide-surface-2026
-    title: Guiding peptide stability with short simulations
+    paper_id: peptide-kinetics-2026
+    title: Guiding peptide kinetics
     finding: >-
-      In CLN025, collective variables learned from short simulations help identify sites
-      where mutations tend to stabilize or destabilize the folded peptide.
+      Short simulations of wild-type chignolin help predict whether mutations at particular
+      sites are likely to accelerate or slow unfolding.
     figure:
-      image: /assets/papers/peptide-surface-2026-result.jpg
-      number: Figure 3
+      image: /assets/papers/peptide-kinetics-2026-spotlight.svg
+      number: Figures 1a and 2a
       caption: >-
-        Residue-level weights versus site-averaged changes in melting temperature (left),
-        and the weights at each residue (right).
+        Chignolin backbone-distance descriptors (left) and residue importance versus
+        mutation-dependent changes in unfolding time (right).
       alt: >-
-        In CLN025, larger wild-type HLDA residue weights correspond to more negative
-        site-averaged mutation-induced changes in melting temperature. The second panel
-        compares the normalized weights at each residue.
-      source: https://pmc.ncbi.nlm.nih.gov/articles/PMC13418176/#fig3
+        Chignolin structure with backbone-distance descriptors. The scatter plot shows a
+        positive association between wild-type residue importance and the average log
+        ratio of wild-type to mutant unfolding times.
+      source: https://pmc.ncbi.nlm.nih.gov/articles/PMC13173532/
       license: CC BY 4.0
       license_url: https://creativecommons.org/licenses/by/4.0/
       credit: >-
-        © 2026 Muralika Medaparambath, Alexander Zhilkin, and Dan Mendels.
-        Published by the American Chemical Society. Reproduced without alteration.
-      width: 696
-      height: 293
+        © 2026 Alexander Zhilkin, Muralika Medaparambath, and Dan Mendels.
+        Published by the American Chemical Society. Panels excerpted from Figures 1a
+        and 2a and arranged side by side; original data and axes unchanged.
+      width: 1200
+      height: 600
   # Optional decorative SVG. Remove this field to hide the homepage visual.
   hero_visual: /assets/research/molecular-ensemble.svg
   eyebrow: Computational Molecular Engineering

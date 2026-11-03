@@ -190,6 +190,9 @@ dimensions, source, and license. Put the image in `public/assets/papers/`.
 The paper and code links come from that publication's existing entry. Remove
 the complete `home.spotlight` block to hide the feature. The original paper
 overview and abstract stay in the publication entry.
+The kinetics spotlight assembles original panels from Figures 1a and 2a as an
+SVG. Its unmodified source images are retained in `public/assets/papers/`; run
+`node scripts/compose-kinetics-spotlight.mjs` to regenerate the arrangement.
 
 Design guardrails for future edits:
 
