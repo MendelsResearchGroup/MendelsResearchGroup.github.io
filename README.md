@@ -179,6 +179,9 @@ The preview is statically `noindex` and excluded from the canonical sitemap.
 The homepage reuses Atlas's subtle molecular network as a decorative background.
 It follows `home.hero_visual`; remove that YAML field to hide it. Light and dark
 mode use separate low opacities, with text contrast checked over the network.
+Body text is 16px and secondary text is at least 14px at the default browser
+font size. The preview uses relative font sizes so reader font preferences scale
+the text; narrow member biographies flow beneath the portraits.
 
 Design guardrails for future edits:
 
