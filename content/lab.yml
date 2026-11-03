@@ -158,7 +158,8 @@ research:
       publication_ids: [networks-2025, gnn-2026]
 
 # PEOPLE: put portraits in public/assets/people/. Website and email are optional.
-# To remove a member from the site, remove their complete block.
+# Set status: alumni to move someone to the photo-free Alumni section.
+# Alumni keep their profile and publication links; an image is not required.
 people:
   - id: dan-mendels
     name: Dr. Dan Mendels
@@ -186,8 +187,8 @@ people:
     orcid: https://orcid.org/0000-0001-6265-5684
   - id: salman-salman
     name: Salman Salman
-    role: PhD Student
-    image: /assets/people/salman-salman.jpeg
+    status: alumni
+    role: Former PhD student
     bio: >-
       Salman joined the group in October 2023. He has a BSc and MSc with honors in Computer Science
       from Leipzig University and the University of Strathclyde, respectively. His primary focus was
@@ -197,11 +198,11 @@ people:
       theory.
   - id: muralika-medaparambath
     name: Muralika Medaparambath
-    role: MSc Student
-    image: /assets/people/muralika-medaparambath.jpg
+    status: alumni
+    role: Former MSc student
     bio: >-
-      I’m a masters student in Applied Mathematics at the Technion. I'm interested in using
-      computational and statistical methods to study protein folding and dynamics.
+      Muralika was an MSc student in Applied Mathematics at the Technion, with research
+      interests in computational and statistical approaches to protein folding and dynamics.
   - id: alex-zhilkin
     name: Alex Zhilkin
     role: PhD Student
@@ -224,6 +225,23 @@ people:
       Eli joined the CME Group in April 2025. He has an MSc in Physics from Ural Federal University
       where his primary focus was on quantum chemical calculations and DFT and their applications in
       the field of NMR.
+  - id: eli-eydlin
+    name: Eli Eydlin
+    role: PhD candidate
+    image: /assets/people/eli-eydlin.jpg
+    image_source: https://r-consortium.org/posts/building-bridges-in-haifa-israel/
+    website: https://github.com/EydlinIlya
+    website_label: GitHub
+    bio: >-
+      Eli holds an MSc in Applied Mathematics and Physics from the Moscow Institute of
+      Physics and Technology. His background spans data science and computational biology,
+      including AI and bioinformatics work at Barcode Nanotech. He develops open-source
+      R tools and founded the Haifa R User Group.
+    bio_sources:
+      - https://www.barcode-nano.com/team
+      - https://github.com/EydlinIlya
+      - https://r-consortium.org/posts/building-bridges-in-haifa-israel/
+      - https://cran.r-project.org/package=perspectiveR
 
 # PUBLICATIONS: newest first; year must be a number. Keep id unique.
 # Required: id, title, authors, year, venue, type, url.

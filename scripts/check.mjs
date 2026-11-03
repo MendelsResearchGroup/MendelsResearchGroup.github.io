@@ -1,25 +1,46 @@
 import { readdir, readFile, access } from 'node:fs/promises';
 import { resolve, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import {parse} from 'yaml';
 const root=fileURLToPath(new URL('../dist',import.meta.url));
+const {people}=parse(await readFile(new URL('../content/lab.yml',import.meta.url),'utf8'));
 async function walk(dir){const entries=await readdir(dir,{withFileTypes:true});return (await Promise.all(entries.map(x=>x.isDirectory()?walk(resolve(dir,x.name)):resolve(dir,x.name)))).flat();}
 const files=(await walk(root)).filter(f=>f.endsWith('.html'));
 const errors=[];let references=0;
 for(const file of files){
   const html=await readFile(file,'utf8'),label=relative(root,file);
+  const logicalLabel=label.startsWith('classic'+sep)?label.split(sep).slice(2).join(sep):/^(fieldnotes|contemporary|modern)[\\/]/.test(label)?label.split(sep).slice(1).join(sep):label;
+  if(logicalLabel==='people'+sep+'index.html'){
+    const alumni=html.match(/<section class="alumni-section"[\s\S]*?<\/section>/)?.[0]||'';
+    const current=html.replace(alumni,'');
+    if(/<img\b/.test(alumni))errors.push(`${label}: alumni directory should not contain photos`);
+    for(const person of people){
+      const section=person.status==='alumni'?alumni:current;
+      if(!section.includes('/people/'+person.id+'/'))errors.push(`${label}: ${person.name} missing from their directory section`);
+      if(person.status==='alumni'&&current.includes('id="'+person.id+'"'))errors.push(`${label}: alumnus listed as a current member`);
+    }
+  }
+  const profile=people.find(p=>logicalLabel==='people'+sep+p.id+sep+'index.html');
+  if(profile?.status==='alumni'&&/<img\b[^>]+src="\/assets\/people\//.test(html))errors.push(`${label}: alumni profile should not contain a portrait`);
   if((html.match(/<h1[ >]/g)||[]).length!==1)errors.push(`${label}: expected one primary heading`);
   if(!/<meta name="description" content="[^"]+"/.test(html))errors.push(`${label}: missing description`);
   if(!/<link rel="canonical" href="https:\/\//.test(html))errors.push(`${label}: missing canonical URL`);
   for(const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g))try{
     const data=JSON.parse(m[1]);
     if(!data['@graph']?.some(entity=>entity['@type']==='WebSite'))errors.push(`${label}: missing website identity`);
-    const pageLabel=label.startsWith('classic'+sep)?label.split(sep).slice(2).join(sep):/^(fieldnotes|contemporary)[\\/]/.test(label)?label.split(sep).slice(1).join(sep):label;
+    const pageLabel=logicalLabel;
     if(pageLabel.startsWith('publications'+sep)&&pageLabel!=='publications'+sep+'index.html'){
       for(const name of ['citation_title','citation_author','citation_publication_date'])if(!html.includes(`name="${name}"`))errors.push(`${label}: missing ${name}`);
       if(!data['@graph']?.some(entity=>entity['@type']==='ScholarlyArticle'&&entity.mainEntityOfPage))errors.push(`${label}: missing paper identity`);
     }
   }catch{errors.push(`${label}: invalid structured data`);}
-  if(/^(fieldnotes|classic|contemporary)[\\/]/.test(label)&&!html.includes('name="robots" content="noindex, follow"'))errors.push(`${label}: preview should not be indexed`);
+  const isPreview=/^(fieldnotes|classic|contemporary|modern)[\\/]/.test(label);
+  if(isPreview&&!html.includes('name="robots" content="noindex, follow"'))errors.push(`${label}: preview should not be indexed`);
+  if(!isPreview){
+    if(!html.includes('<body class="ct-page">'))errors.push(`${label}: main site should use the Contemporary theme`);
+    if(html.includes('data-design-preview="true"')||html.includes('aria-label="Design preview"'))errors.push(`${label}: main site should not be a design preview`);
+    if(!['search'+sep+'index.html','404'+sep+'index.html','404.html','vote'+sep+'index.html'].includes(label)&&html.includes('name="robots" content="noindex'))errors.push(`${label}: public content should be indexable`);
+  }
   const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
   if(new Set(ids).size!==ids.length)errors.push(`${label}: duplicate HTML IDs`);
   for(const m of html.matchAll(/\b(?:href|src)="([^"<]+)"/g)){
@@ -37,6 +58,6 @@ for(const name of ['sitemap.xml','robots.txt','search-index.json','404.html'])tr
 const index=JSON.parse(await readFile(resolve(root,'search-index.json'),'utf8'));
 for(const path of ['search/index.html','404.html','vote/index.html'])if(!(await readFile(resolve(root,path),'utf8')).includes('name="robots" content="noindex, follow"'))errors.push(`${path}: should not be indexed`);
 if((await readFile(resolve(root,'sitemap.xml'),'utf8')).includes('/search/'))errors.push('Internal search should not be in the sitemap');
-if((await readFile(resolve(root,'sitemap.xml'),'utf8')).match(/\/(?:fieldnotes|classic|contemporary)\//))errors.push('Design previews should not be in the sitemap');
+if((await readFile(resolve(root,'sitemap.xml'),'utf8')).match(/\/(?:fieldnotes|classic|contemporary|modern)\//))errors.push('Design previews should not be in the sitemap');
 for(const item of index){const url=new URL(item.url,'https://example.org');let target=resolve(root,'.'+url.pathname);if(url.pathname.endsWith('/'))target=resolve(target,'index.html');try{await access(target);}catch{errors.push(`Search result points to a missing page: ${item.url}`);}}
 if(errors.length){console.error(errors.join('\n'));process.exitCode=1;}else console.log(`Verified ${files.length} HTML files, ${references} internal references, and ${index.length} search entries. No broken local links or missing metadata.`);

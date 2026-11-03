@@ -186,6 +186,7 @@ html[data-design='contemporary'][data-theme='dark'] .ct-network { opacity:.11; }
 .ct-document .paper-abstract { max-width:800px; }
 .ct-document .abstract-text { line-height:1.75; }
 .ct-document .pi-feature { grid-template-columns:200px minmax(0,1fr); gap:34px; padding-block:28px 32px; }
+.ct-document .profile.profile-alumni { grid-template-columns:1fr; }
 .ct-document .profile h1 { font-size:2rem; margin-bottom:16px; }
 .ct-document .person-links { gap:5px 22px; margin-top:17px; }
 .ct-document .recent { padding-block:25px 0; }

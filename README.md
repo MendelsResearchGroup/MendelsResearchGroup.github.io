@@ -80,6 +80,16 @@ identity to the structured metadata. Removing the complete person block removes 
 the directory and deletes their generated profile on the next build. Prefer
 stable IDs so profile and paper links keep working.
 
+To move someone to the **Alumni** section, add `status: alumni` to their existing
+person block and update `role:` to their former role, such as `Former MSc student`.
+Their profile and publication links remain available. Alumni entries and profiles
+have no portraits, so their `image:` field may be removed. Current members can omit
+`status:` or use `status: current`.
+
+`website_label:` optionally changes the contact-link text (for example, `GitHub`).
+An optional `bio_sources:` list records reference URLs for maintaining a bio;
+these references are not displayed as extra text in the directory.
+
 ### Where images go
 
 ```text
@@ -167,15 +177,18 @@ pull requests build and validate without deploying. No personal token is require
 
 ### Contemporary academic design
 
-`/contemporary/` is a single restrained alternative between the original modern
-designs and the traditional academic set. `/?design=contemporary` also opens it.
+The main site now uses the Contemporary theme: the latest restrained design,
+with the subtle network background and the peptide-kinetics research spotlight.
+It renders at the normal page URLs without a preview banner. `/contemporary/`
+and `/?design=contemporary` remain available as preview links.
 Every content page has a corresponding preview, with working search, publication
 filters, profiles, original abstracts, figure credits, and system/saved dark mode.
-The default homepage and both existing ballots stay as they are.
+Both existing ballots remain available at their original URLs.
 
 All content still comes from `content/lab.yml`; the template is
 `scripts/contemporary.mjs` and its styles are in `public/contemporary.css`.
-The preview is statically `noindex` and excluded from the canonical sitemap.
+The `/contemporary/` preview is statically `noindex` and excluded from the canonical
+sitemap. Main-site pages retain their canonical URLs and indexing metadata.
 The homepage reuses Atlas's subtle molecular network as a decorative background.
 It follows `home.hero_visual`; remove that YAML field to hide it. Light and dark
 mode use separate low opacities, with text contrast checked over the network.
@@ -237,11 +250,14 @@ index; the normal site's canonical URLs remain unchanged.
 
 Append a `design` query parameter to any page:
 
-- `/?design=studio` — the contemporary sans-serif layout.
+- `/?design=studio` — the original Studio sans-serif layout.
 - `/?design=editorial` — warm journal styling, serif headings, and research rows.
 - `/?design=atlas` — a framed technical atlas with modular grids.
 - `/fieldnotes/` — a separate, question-led structure with side navigation,
   a featured study, connected projects, and a compact people directory.
+
+The first three links open their preserved `/modern/` previews. They remain
+available for comparison; the normal site uses the selected Contemporary theme.
 
 `/?design=fieldnotes` (or `?design=4`) also opens Fieldnotes. Each normal page has
 a corresponding `/fieldnotes/` preview, including profiles and paper abstracts.

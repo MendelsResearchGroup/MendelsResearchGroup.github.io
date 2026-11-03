@@ -1,14 +1,14 @@
 const designPreview=document.documentElement.dataset.designPreview==='true';
-const activeDesign=document.documentElement.dataset.design||'studio';
+const activeDesign=document.documentElement.dataset.design||'contemporary';
 const classicDesigns=['academic','institute','review','handbook'];
-const canonicalPath=path=>path.replace(/^\/classic\/(academic|institute|review|handbook)(?=\/)/,'').replace(/^\/(?:fieldnotes|contemporary)(?=\/)/,'');
+const canonicalPath=path=>path.replace(/^\/classic\/(academic|institute|review|handbook)(?=\/)/,'').replace(/^\/(?:fieldnotes|contemporary|modern)(?=\/)/,'');
 function withDesign(href){
   if(!designPreview)return href;
   const url=new URL(href,location.href);
   if(url.origin===location.origin&&(url.pathname.endsWith('/')||url.pathname.endsWith('.html'))){
     if(classicDesigns.includes(activeDesign)){url.pathname='/classic/'+activeDesign+canonicalPath(url.pathname);url.searchParams.delete('design');}
     else if(['fieldnotes','contemporary'].includes(activeDesign)){url.pathname='/'+activeDesign+canonicalPath(url.pathname);url.searchParams.delete('design');}
-    else url.searchParams.set('design',activeDesign);
+    else {url.pathname='/modern'+canonicalPath(url.pathname);url.searchParams.set('design',activeDesign);}
   }
   return url.origin===location.origin?url.pathname+url.search+url.hash:href;
 }
@@ -23,7 +23,7 @@ function updateDesignLinks(){
     const url=new URL(location.href);url.pathname=canonicalPath(url.pathname);
     if(classicDesigns.includes(a.dataset.designOption)){url.pathname='/classic/'+a.dataset.designOption+url.pathname;url.searchParams.delete('design');}
     else if(['fieldnotes','contemporary'].includes(a.dataset.designOption)){url.pathname='/'+a.dataset.designOption+url.pathname;url.searchParams.delete('design');}
-    else url.searchParams.set('design',a.dataset.designOption);
+    else {url.pathname='/modern'+url.pathname;url.searchParams.set('design',a.dataset.designOption);}
     a.href=url.pathname+url.search+url.hash;
     if(a.dataset.designOption===activeDesign)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
   }

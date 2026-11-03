@@ -112,6 +112,7 @@ html[data-design='fieldnotes'][data-theme='dark'] {
 .fn-group-photo { margin: 36px auto 0; max-width: 800px; }
 .fn-group-photo img { width: 100%; border-radius: 7px; }
 .fn-profile-intro { display: grid; grid-template-columns: 160px 1fr; gap: 28px; padding-bottom: 32px; border-bottom: 1px solid var(--line); }
+.fn-profile-intro.fn-profile-alumni { grid-template-columns:1fr; }
 .fn-profile-intro > img { width: 160px; height: 200px; border-radius: 5px; object-fit: cover; object-position: center 25%; }
 .fn-profile-intro h1 { font-size: 38px; margin-top: 10px; }
 .fn-profile-intro > div > p:last-child { color: var(--muted); margin-top: 20px; }

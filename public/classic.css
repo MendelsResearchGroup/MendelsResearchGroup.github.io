@@ -161,6 +161,7 @@ html[data-classic] { --sans:Arial,Helvetica,sans-serif; scroll-padding-top:84px;
 .cl-document .research-area aside a { font-size:13px; }
 .cl-document .research-context { padding-block:18px 28px; }
 .cl-document .pi-feature { grid-template-columns:140px minmax(0,1fr); gap:24px; padding-block:20px 30px; }
+.cl-document .profile.profile-alumni { grid-template-columns:1fr; }
 .cl-document .pi-feature > img { width:140px; height:175px; object-fit:cover; object-position:center 25%; }
 .cl-document .pi-feature h1,.cl-document .pi-feature h2 { font-size:26px; }
 .cl-document .section-heading h2 { font-size:22px; }

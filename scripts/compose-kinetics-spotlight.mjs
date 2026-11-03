@@ -12,10 +12,6 @@ const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" vie
     <clipPath id="chignolin-panel"><rect width="260" height="318"/></clipPath>
     <clipPath id="scatter-panel"><rect width="347" height="229"/></clipPath>
   </defs>
-  <g fill="#233642" font-family="Arial, sans-serif" font-size="28">
-    <text x="178" y="32" text-anchor="middle">Chignolin</text>
-    <text x="365" y="32">Mutation-dependent unfolding</text>
-  </g>
   <g transform="translate(12 105) scale(1.28)">
     <g clip-path="url(#chignolin-panel)"><image width="666" height="346" href="data:image/jpeg;base64,${molecule}"/></g>
   </g>

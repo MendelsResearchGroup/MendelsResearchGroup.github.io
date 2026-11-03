@@ -360,3 +360,16 @@ input::placeholder { color: #657485; }
   .profile h1 { font-size: 34px; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* Shared, photo-free alumni directory across all designs. */
+.alumni-section { margin-block:32px; padding-top:24px; border-top:1px solid var(--line); }
+.alumni-section h2 { font-size:1.5rem; line-height:1.3; margin:0; }
+.alumni-list { list-style:none; margin:16px 0 0; padding:0; }
+.alumni-entry { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px 24px; padding-block:16px; border-bottom:1px solid var(--line); }
+.alumni-entry h3 { font-size:1.125rem; line-height:1.4; margin:0; }
+.alumni-entry h3 a { display:inline-flex; align-items:center; min-height:32px; }
+.alumni-entry .alumni-role { color:var(--muted); font-size:.875rem; margin-top:4px; }
+.alumni-links { display:flex; flex-wrap:wrap; gap:6px 20px; }
+.alumni-links a { display:inline-flex; align-items:center; min-height:32px; font-size:.875rem; }
+.profile.profile-alumni { grid-template-columns:1fr; }
+.profile.profile-alumni>div { display:block; }

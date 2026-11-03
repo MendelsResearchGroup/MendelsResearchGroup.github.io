@@ -9,6 +9,7 @@ import { votingBody } from './voting.mjs';
 import {classicDocument} from './classic.mjs';
 import {classicDesigns} from './classic-designs.mjs';
 import {contemporaryDocument} from './contemporary.mjs';
+import {currentPeople,alumniSection} from './people.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const out = resolve(root, 'dist');
@@ -30,7 +31,7 @@ if(d.voting){object(d.voting,'voting');if(typeof d.voting.enabled!=='boolean')fa
 if(d.voting?.web2){object(d.voting.web2,'voting.web2');if(typeof d.voting.web2.enabled!=='boolean')fail('voting.web2.enabled','use true or false');for(const k of ['poll_id','title','introduction'])text(d.voting.web2[k],'voting.web2.'+k);url(d.voting.web2.endpoint,'voting.web2.endpoint');}
 if (d.lab.google_site_verification && (typeof d.lab.google_site_verification!=='string'||!(/^[A-Za-z0-9_-]+$/).test(d.lab.google_site_verification))) fail('lab.google_site_verification','use only the token from Google, without the surrounding HTML tag');
 for (const path of ['people','publications','research.areas','software.projects','positions.backgrounds']) list(path.split('.').reduce((v,k) => v?.[k], d), path);
-for (const [collection, fields] of [[d.people,['id','name','role','image','bio']], [d.publications,['id','title','authors','venue','type','url']], [d.research.areas,['id','number','title','summary','question','description','example']], [d.software.projects,['name','category','description','url']]]) {
+for (const [collection, fields] of [[d.people,['id','name','role','bio']], [d.publications,['id','title','authors','venue','type','url']], [d.research.areas,['id','number','title','summary','question','description','example']], [d.software.projects,['name','category','description','url']]]) {
   const seen = new Set();
   for (const [i, item] of collection.entries()) {
     object(item, `entry ${i+1}`);
@@ -41,6 +42,12 @@ for (const [collection, fields] of [[d.people,['id','name','role','image','bio']
     if (item.id && !/^[a-z0-9-]+$/.test(item.id)) fail(id, 'IDs may contain lowercase letters, numbers, and hyphens');
     for (const f of ['url','code','website','preprint','orcid']) if (item[f]) url(item[f], `${id}.${f}`);
   }
+}
+for(const p of d.people){
+  if(p.status!==undefined&&!['current','alumni'].includes(p.status))fail(p.id+'.status','use current or alumni');
+  if(p.status!=='alumni')text(p.image,p.id+'.image');
+  if(p.website_label!==undefined)text(p.website_label,p.id+'.website_label');
+  if(p.bio_sources!==undefined){list(p.bio_sources,p.id+'.bio_sources');for(const source of p.bio_sources)url(source,p.id+'.bio_sources');}
 }
 for (const p of d.publications) if (!Number.isInteger(p.year) || p.year < 1900 || p.year > 2200) fail(`${p.id}.year`, 'use a four-digit number');
 for (const p of d.publications) {
@@ -76,11 +83,12 @@ if(d.home.spotlight){
   for(const k of ['source','license_url'])url(f[k],'home.spotlight.figure.'+k);
   if(!Number.isInteger(f.width)||!Number.isInteger(f.height)||f.width<1||f.height<1)fail('home.spotlight.figure','provide positive width and height values');
 }
-const images = [d.lab.logo, ...(d.lab.logo_dark?[d.lab.logo_dark]:[]), ...(d.home.hero_visual?[d.home.hero_visual]:[]), ...(d.home.spotlight?[d.home.spotlight.figure.image]:[]), d.lab.group_photo, ...d.people.map(p => p.image), ...d.publications.filter(p=>p.overview).map(p=>p.overview.figure.image)];
+const images = [d.lab.logo, ...(d.lab.logo_dark?[d.lab.logo_dark]:[]), ...(d.home.hero_visual?[d.home.hero_visual]:[]), ...(d.home.spotlight?[d.home.spotlight.figure.image]:[]), d.lab.group_photo, ...d.people.map(p => p.image).filter(Boolean), ...d.publications.filter(p=>p.overview).map(p=>p.overview.figure.image)];
 for (const image of images) {
   if (typeof image !== 'string' || !/^\/assets\/(?:[a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_-][a-zA-Z0-9_.-]*\.(?:jpg|jpeg|png|webp|svg)$/.test(image)) fail('image', 'use a file within /assets/');
   try { await access(resolve(root, 'public', image.slice(1))); } catch { fail(image, 'image file is missing from public/assets/'); }
 }
+const spotlightImageURL=d.home.spotlight?d.home.spotlight.figure.image+'?v='+createHash('sha256').update(await readFile(resolve(root,'public','.'+d.home.spotlight.figure.image))).digest('hex').slice(0,12):null;
 // Remove only this project's generated dist directory, after validating the content.
 if (dirname(out) !== root.replace(/[\\/]$/, '')) throw new Error('Unexpected build output directory');
 await rm(out, { recursive: true, force: true });
@@ -123,7 +131,13 @@ async function page(path, title, description, body, structured, indexText='') {
   </body></html>`;
   const dir = resolve(out, '.'+path);
   await mkdir(dir,{recursive:true});
-  await writeFile(resolve(dir,'index.html'),html);
+  const head=html.slice(0,html.indexOf('</head>'));
+  await writeFile(resolve(dir,'index.html'),contemporaryDocument({data:d,publications,path,head,body,stylesheet:assetPath('contemporary.css'),spotlightImageURL,previewMode:false}));
+  // Keep the original URL-selectable designs available as non-indexed previews.
+  const modernDir=resolve(out,'modern','.'+path);
+  await mkdir(modernDir,{recursive:true});
+  const modernHTML=html.replace('<html lang="en">','<html lang="en" data-design="studio" data-design-preview="true">').replace(/<meta name="robots" content="[^"]*">/g,'').replace('<head>','<head><meta name="robots" content="noindex, follow">');
+  await writeFile(resolve(modernDir,'index.html'),modernHTML);
   const fourthDir=resolve(out,'fieldnotes','.'+path);
   await mkdir(fourthDir,{recursive:true});
   await writeFile(resolve(fourthDir,'index.html'),fieldnotesDocument({data:d,publications,path,title,head:html.slice(0,html.indexOf('</head>')),body}));
@@ -134,7 +148,7 @@ async function page(path, title, description, body, structured, indexText='') {
   }
   const contemporaryDir=resolve(out,'contemporary','.'+path);
   await mkdir(contemporaryDir,{recursive:true});
-  await writeFile(resolve(contemporaryDir,'index.html'),contemporaryDocument({data:d,publications,path,head:html.slice(0,html.indexOf('</head>')),body,stylesheet:assetPath('contemporary.css')}));
+  await writeFile(resolve(contemporaryDir,'index.html'),contemporaryDocument({data:d,publications,path,head:html.slice(0,html.indexOf('</head>')),body,stylesheet:assetPath('contemporary.css'),spotlightImageURL}));
   if (!['/search/','/404/','/vote/'].includes(path)) searchIndex.push({title, url:path, category: path==='/'?'The lab':path.split('/')[1], text:description+' '+indexText});
 }
 function intro(kicker,title,description) {return `<section class="page-intro wrap"><p class="eyebrow">${e(kicker)}</p><h1>${e(title)}</h1>${description?`<p class="intro-copy">${e(description)}</p>`:''}</section>`;}
@@ -163,14 +177,17 @@ await page('/',d.lab.group,d.lab.description,`
 <section class="recent wrap"><div class="section-heading"><div><p class="eyebrow">Publications</p><h2>Recent publications</h2></div>${link('/publications/','All publications')}</div>${publications.slice(0,3).map(p=>paper(p,true)).join('')}</section>${joinBand()}`);
 await page('/research/','Research',d.research.introduction,`${intro('Research',d.research.title,d.research.introduction)}<section class="wrap research-context"><p class="large-copy">${e(d.research.context)}</p><nav class="research-index" aria-label="Research directions">${d.research.areas.map(a=>link('/research/#'+a.id,a.number+' / '+a.title)).join('')}</nav></section><div class="wrap research-details">${d.research.areas.map(researchArea).join('')}</div>${joinBand()}`,organization,d.research.areas.map(a=>[a.title,a.question,a.description,a.example,...a.methods].join(' ')).join(' '));
 const pi = d.people.find(p=>p.role==='Principal Investigator') || d.people[0];
-const personLinks = p => `${p.email?link('mailto:'+p.email,'Email'):''}${p.website?link(p.website,'Personal website'):''}${p.orcid?link(p.orcid,'ORCID'):''}`;
+const members=currentPeople(d.people);
+const personLinks = p => `${p.email?link('mailto:'+p.email,'Email'):''}${p.website?link(p.website,p.website_label||'Personal website'):''}${p.orcid?link(p.orcid,'ORCID'):''}`;
 const personCard = p => `<article class="person-card" id="${e(p.id)}"><a class="portrait-link" href="/people/${e(p.id)}/"><img src="${e(p.image)}" width="600" height="750" loading="lazy" alt="${e(p.name)}"></a><p class="label">${e(p.role)}</p><h2><a href="/people/${e(p.id)}/">${e(p.name)}</a></h2><p>${e(p.bio)}</p><div class="person-links">${personLinks(p)}</div></article>`;
-await page('/people/','People','Meet the researchers in the Mendels Research Group at the Technion, led by Dr. Dan Mendels.',`${intro('People','Meet the team','')}<section class="wrap pi-feature"><img src="${e(pi.image)}" width="1084" height="1437" alt="${e(pi.name)}"><div><p class="eyebrow">${e(pi.role)}</p><h2>${e(pi.name)}</h2><p class="large-copy">${e(pi.bio)}</p><div class="person-links">${personLinks(pi)}${link('/people/'+pi.id+'/','Researcher profile')}</div></div></section><section class="wrap"><div class="section-heading"><h2>People</h2><span class="label">${d.people.length-1} researchers</span></div><div class="people-grid">${d.people.filter(p=>p!==pi).map(personCard).join('')}</div></section><figure class="wrap group-photo"><img src="${e(d.lab.group_photo)}" width="2040" height="1530" loading="lazy" alt="The Computational Molecular Engineering group at the Technion"><figcaption>${e(d.lab.group_photo_caption)}</figcaption></figure>${joinBand()}`,organization,d.people.map(p=>p.name+' '+p.role+' '+p.bio).join(' '));
+await page('/people/','People','Meet the researchers in the Mendels Research Group at the Technion, led by Dr. Dan Mendels.',`${intro('People','Meet the team','')}<section class="wrap pi-feature"><img src="${e(pi.image)}" width="1084" height="1437" alt="${e(pi.name)}"><div><p class="eyebrow">${e(pi.role)}</p><h2>${e(pi.name)}</h2><p class="large-copy">${e(pi.bio)}</p><div class="person-links">${personLinks(pi)}${link('/people/'+pi.id+'/','Researcher profile')}</div></div></section><section class="wrap"><div class="section-heading"><h2>People</h2><span class="label">${members.length-1} researchers</span></div><div class="people-grid">${members.filter(p=>p!==pi).map(personCard).join('')}</div></section><div class="wrap">${alumniSection(d.people)}</div><figure class="wrap group-photo"><img src="${e(d.lab.group_photo)}" width="2040" height="1530" loading="lazy" alt="The Computational Molecular Engineering group at the Technion"><figcaption>${e(d.lab.group_photo_caption)}</figcaption></figure>${joinBand()}`,organization,d.people.map(p=>p.name+' '+p.role+' '+p.bio).join(' '));
 for (const p of d.people) {
+  const profileClass=p.status==='alumni'?'wrap pi-feature profile profile-alumni':'wrap pi-feature profile';
+  const portrait=p.status==='alumni'?'':`<img src="${e(p.image)}" width="600" height="750" alt="${e(p.name)}">`;
   // Match publication author variants without changing the names shown in citations.
   const aliases = p.id==='alex-zhilkin'?['zhilkin']:p.id==='sergey-shteingoltz'?['shteingolts','shteingoltz']: [p.name.split(' ').at(-1).toLowerCase()];
   const pubs = publications.filter(pub=>aliases.some(alias=>pub.authors.toLowerCase().includes(alias)));
-  await page('/people/'+p.id+'/',p.name,p.role+' at '+d.lab.full_name+'. '+p.bio,`<div class="wrap breadcrumb"><a href="/people/">People</a><span aria-hidden="true"> / </span>${e(p.name)}</div><section class="wrap pi-feature profile"><img src="${e(p.image)}" width="600" height="750" alt="${e(p.name)}"><div><p class="eyebrow">${e(p.role)}</p><h1>${e(p.name)}</h1><p class="large-copy">${e(p.bio)}</p><div class="person-links">${personLinks(p)}</div></div></section>${pubs.length?`<section class="wrap recent"><div class="section-heading"><h2>Selected publications</h2>${link('/publications/','All publications')}</div>${pubs.map(x=>paper(x,true)).join('')}</section>`:''}`,{'@context':'https://schema.org','@type':'Person',name:p.name,jobTitle:p.role,description:p.bio,image:base+p.image,url:base+'/people/'+p.id+'/',affiliation:{'@type':'ResearchOrganization',name:d.lab.full_name},...(p.website?{sameAs:[p.website]}:{})});
+  await page('/people/'+p.id+'/',p.name,p.role+' at '+d.lab.full_name+'. '+p.bio,`<div class="wrap breadcrumb"><a href="/people/">People</a><span aria-hidden="true"> / </span>${e(p.name)}</div><section class="${profileClass}">${portrait}<div><p class="eyebrow">${e(p.role)}</p><h1>${e(p.name)}</h1><p class="large-copy">${e(p.bio)}</p><div class="person-links">${personLinks(p)}</div></div></section>${pubs.length?`<section class="wrap recent"><div class="section-heading"><h2>Selected publications</h2>${link('/publications/','All publications')}</div>${pubs.map(x=>paper(x,true)).join('')}</section>`:''}`,{'@context':'https://schema.org','@type':'Person',name:p.name,jobTitle:p.role,description:p.bio,image:base+p.image,url:base+'/people/'+p.id+'/',affiliation:{'@type':'ResearchOrganization',name:d.lab.full_name},...(p.website?{sameAs:[p.website]}:{})});
 }
 await page('/publications/','Publications','Explore publications and preprints from the Mendels Research Group, with links to papers, code, and research data.',`${intro('Publications','Publications','')}<section class="wrap publication-library" aria-label="Publication library"><form class="filters" role="search" id="paper-filter"><div class="search-field"><label for="paper-search">Search publications</label><input id="paper-search" name="q" type="search" placeholder="Title, author, or topic…" autocomplete="off"></div><div class="year-field"><label for="paper-year">Publication year</label><select id="paper-year" name="year"><option value="all">All years</option>${years.map(y=>`<option value="${y}">${y}</option>`).join('')}</select></div></form><p class="result-count" id="paper-count" role="status">${publications.length} publications</p><div id="paper-list">${publications.map(p=>paper(p)).join('')}</div><p id="paper-empty" class="empty" hidden>No publications match your search. Try another keyword or year.</p></section>`,{'@context':'https://schema.org','@type':'CollectionPage',name:'Publications — '+d.lab.name,url:base+'/publications/',mainEntity:{'@type':'ItemList',itemListElement:publications.map((p,i)=>({'@type':'ListItem',position:i+1,item:{'@type':'ScholarlyArticle',name:p.title,datePublished:String(p.year),url:p.url,author:p.authors.split(',').map(name=>({'@type':'Person',name:name.trim()}))}}))}},publications.map(p=>p.title+' '+p.authors+' '+p.year).join(' '));
 await page('/software/','Software',d.software.introduction,`${intro('Open research',d.software.title,d.software.introduction)}<section class="wrap software-list">${d.software.projects.map((p,i)=>`<article class="software-row"><span class="area-number">${String(i+1).padStart(2,'0')}</span><div><p class="eyebrow">${e(p.category)}</p><h2>${e(p.name)}</h2><p>${e(p.description)}</p></div>${link(p.url,'View repository')}</article>`).join('')}<div class="software-end">${link(d.lab.github,'Explore the GitHub organization','button')}</div></section>`,organization,d.software.projects.map(p=>p.name+' '+p.description).join(' '));
@@ -210,4 +227,4 @@ await writeFile(resolve(out,'robots.txt'),`User-agent: *\nAllow: /\nSitemap: ${b
 await writeFile(resolve(out,'.nojekyll'),'');
 await page('/404/','Page not found','Find your way back to the CME Lab website.',`${intro('404','Page not found','The page you are looking for may have moved.')}<div class="wrap error-actions">${link('/','Return home','button')}${link('/search/','Search the site')}</div>`);
 await cp(resolve(out,'404/index.html'),resolve(out,'404.html'));
-console.log(`Built ${urls.length+1} canonical pages and six full preview sites, ${d.people.length} people, and ${publications.length} publications from content/lab.yml.`);
+console.log(`Built ${urls.length+1} canonical pages in the Contemporary theme and seven full preview sites, ${d.people.length} people, and ${publications.length} publications from content/lab.yml.`);

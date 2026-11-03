@@ -40,7 +40,7 @@ export function pageMetadata({data:d,base,path,title,description,entity}) {
   } else if(person) {
     const personId=canonical+'#person';
     const sameAs=[person.website,person.orcid].filter(Boolean);
-    graph.push({'@type':'Person','@id':personId,name:person.name,jobTitle:person.role,description:person.bio,url:canonical,image:base+person.image,affiliation:{'@id':labId},...(sameAs.length?{sameAs}:{})});
+    graph.push({'@type':'Person','@id':personId,name:person.name,description:person.bio,url:canonical,...(person.status==='alumni'?{alumniOf:{'@id':labId}}:{jobTitle:person.role,image:base+person.image,affiliation:{'@id':labId}}),...(sameAs.length?{sameAs}:{})});
     webPage['@type']='ProfilePage';
     webPage.mainEntity={'@id':personId};
   } else if(entity && entity['@type']!=='ResearchOrganization') {
