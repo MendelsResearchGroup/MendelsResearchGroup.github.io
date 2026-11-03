@@ -165,6 +165,36 @@ pull requests build and validate without deploying. No personal token is require
 
 ## Design and discoverability
 
+### Contemporary academic design
+
+`/contemporary/` is a single restrained alternative between the original modern
+designs and the traditional academic set. `/?design=contemporary` also opens it.
+Every content page has a corresponding preview, with working search, publication
+filters, profiles, original abstracts, figure credits, and system/saved dark mode.
+The default homepage and both existing ballots stay as they are.
+
+All content still comes from `content/lab.yml`; the template is
+`scripts/contemporary.mjs` and its styles are in `public/contemporary.css`.
+The preview is statically `noindex` and excluded from the canonical sitemap.
+
+Design guardrails for future edits:
+
+- Do not number navigation, research themes, or software for decoration.
+- Use the lab's blue and teal, with no decorative gradients or glowing blobs.
+- Use actual research figures with attribution, and real people photographs.
+- Use lists and typographic hierarchy; avoid repeating identical icon cards.
+- Keep headings and section spacing modest. Do not stretch a short introduction
+  across a full screen or insert large artificial gaps between sections.
+- Keep text factual. Do not invent lab history, statistics, awards, or slogans.
+- Use sentence case, plain links, and limited utility icons. Avoid tiny uppercase
+  labels, pill badges, arrows on every link, and animated entrances.
+- Preserve visible focus, readable contrast, mobile reflow, and useful labels.
+
+These are design choices, not a method for detecting AI authorship. Background:
+[SCALR's firsthand critique](https://scalr.sg/blog/20-signs-a-website-was-made-by-ai/),
+[NN/g on excessive spacing and scale](https://www.nngroup.com/articles/content-dispersion/),
+and [NN/g on image/text scanning](https://www.nngroup.com/articles/zigzag-page-layout/).
+
 ### New traditional academic designs
 
 The second set has separate, complete page layouts with conventional academic

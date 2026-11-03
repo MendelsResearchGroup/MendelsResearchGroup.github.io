@@ -8,10 +8,11 @@ import { fieldnotesDocument } from './fieldnotes.mjs';
 import { votingBody } from './voting.mjs';
 import {classicDocument} from './classic.mjs';
 import {classicDesigns} from './classic-designs.mjs';
+import {contemporaryDocument} from './contemporary.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const out = resolve(root, 'dist');
-const assetVersions=new Map(await Promise.all(['theme-init.js','app.js','layout.css','themes.css','designs.css','fieldnotes.css','voting.css','voting.js','classic.css'].map(async name=>[name,createHash('sha256').update(await readFile(resolve(root,'public',name))).digest('hex').slice(0,12)])));
+const assetVersions=new Map(await Promise.all(['theme-init.js','app.js','layout.css','themes.css','designs.css','fieldnotes.css','voting.css','voting.js','classic.css','contemporary.css'].map(async name=>[name,createHash('sha256').update(await readFile(resolve(root,'public',name))).digest('hex').slice(0,12)])));
 const assetPath=name=>'/'+name+'?v='+assetVersions.get(name);
 const document = parseDocument(await readFile(resolve(root, 'content/lab.yml'), 'utf8'), { uniqueKeys: true });
 if (document.errors.length) throw new Error('content/lab.yml: ' + document.errors.map(e => e.message).join('\n'));
@@ -120,6 +121,9 @@ async function page(path, title, description, body, structured, indexText='') {
     await mkdir(classicDir,{recursive:true});
     await writeFile(resolve(classicDir,'index.html'),classicDocument({data:d,publications,path,title,head:html.slice(0,html.indexOf('</head>')),body,design}));
   }
+  const contemporaryDir=resolve(out,'contemporary','.'+path);
+  await mkdir(contemporaryDir,{recursive:true});
+  await writeFile(resolve(contemporaryDir,'index.html'),contemporaryDocument({data:d,publications,path,head:html.slice(0,html.indexOf('</head>')),body,stylesheet:assetPath('contemporary.css')}));
   if (!['/search/','/404/','/vote/'].includes(path)) searchIndex.push({title, url:path, category: path==='/'?'The lab':path.split('/')[1], text:description+' '+indexText});
 }
 function intro(kicker,title,description) {return `<section class="page-intro wrap"><p class="eyebrow">${e(kicker)}</p><h1>${e(title)}</h1>${description?`<p class="intro-copy">${e(description)}</p>`:''}</section>`;}
@@ -195,4 +199,4 @@ await writeFile(resolve(out,'robots.txt'),`User-agent: *\nAllow: /\nSitemap: ${b
 await writeFile(resolve(out,'.nojekyll'),'');
 await page('/404/','Page not found','Find your way back to the CME Lab website.',`${intro('404','Page not found','The page you are looking for may have moved.')}<div class="wrap error-actions">${link('/','Return home','button')}${link('/search/','Search the site')}</div>`);
 await cp(resolve(out,'404/index.html'),resolve(out,'404.html'));
-console.log(`Built ${urls.length+1} canonical pages and five full preview sites, ${d.people.length} people, and ${publications.length} publications from content/lab.yml.`);
+console.log(`Built ${urls.length+1} canonical pages and six full preview sites, ${d.people.length} people, and ${publications.length} publications from content/lab.yml.`);

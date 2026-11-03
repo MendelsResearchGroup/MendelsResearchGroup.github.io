@@ -1,17 +1,16 @@
 // Apply URL-selected design and saved/system theme before styles render.
 (() => {
-  const classics=['academic','institute','review','handbook'];
-  const designs={studio:'studio',editorial:'editorial',atlas:'atlas',fieldnotes:'fieldnotes',academic:'academic',institute:'institute',review:'review',handbook:'handbook',1:'studio',2:'editorial',3:'atlas',4:'fieldnotes'};
+  const prefixes={fieldnotes:'/fieldnotes',academic:'/classic/academic',institute:'/classic/institute',review:'/classic/review',handbook:'/classic/handbook',contemporary:'/contemporary'};
+  const designs={studio:'studio',editorial:'editorial',atlas:'atlas',fieldnotes:'fieldnotes',academic:'academic',institute:'institute',review:'review',handbook:'handbook',contemporary:'contemporary',1:'studio',2:'editorial',3:'atlas',4:'fieldnotes'};
   const requested=new URLSearchParams(location.search).get('design');
   const chosen=Object.hasOwn(designs,requested)?designs[requested]:null;
-  const fieldnotes=location.pathname.startsWith('/fieldnotes/');
-  const classic=location.pathname.match(/^\/classic\/(academic|institute|review|handbook)(\/.*)$/);
-  const canonical=location.pathname.replace(/^\/classic\/(academic|institute|review|handbook)(?=\/)/,'').replace(/^\/fieldnotes(?=\/)/,'');
-  if(chosen&&((classics.includes(chosen)&&classic?.[1]!==chosen)||(chosen==='fieldnotes'&&!fieldnotes)||(classic&&!classics.includes(chosen)))){
-    const target=new URL(location.href);target.pathname=(classics.includes(chosen)?'/classic/'+chosen:chosen==='fieldnotes'?'/fieldnotes':'')+canonical;target.searchParams.delete('design');if(!classics.includes(chosen)&&chosen!=='fieldnotes')target.searchParams.set('design',chosen);
+  const current=Object.keys(prefixes).find(id=>location.pathname.startsWith(prefixes[id]+'/'))||null;
+  const canonical=current?location.pathname.slice(prefixes[current].length):location.pathname;
+  if(chosen&&current!==(Object.hasOwn(prefixes,chosen)?chosen:null)){
+    const target=new URL(location.href);target.pathname=(prefixes[chosen]||'')+canonical;target.searchParams.delete('design');if(!Object.hasOwn(prefixes,chosen))target.searchParams.set('design',chosen);
     location.replace(target.href);return;
   }
-  const selected=classic?.[1]||(fieldnotes?'fieldnotes':chosen);
+  const selected=current||chosen;
   document.documentElement.dataset.design=selected||'studio';
   if(selected){
     document.documentElement.dataset.designPreview='true';
