@@ -60,7 +60,10 @@ html[data-design='contemporary'][data-theme='dark'] {
 .ct-header #primary-nav a:hover { color:var(--blue); }
 .ct-header #primary-nav a[aria-current='page'] { border-bottom-color:var(--blue); color:var(--blue); font-weight:600; }
 .ct-header .ct-search-link { margin-left:auto; font-size:14px; }
-.ct-intro { display:grid; grid-template-columns:minmax(0,1fr) 360px; align-items:start; gap:56px; padding-block:36px 34px; border-bottom:1px solid var(--line); }
+.ct-intro { position:relative; isolation:isolate; display:grid; grid-template-columns:minmax(0,1fr) 360px; align-items:start; gap:56px; padding-block:36px 34px; border-bottom:1px solid var(--line); }
+/* Reuse Atlas's molecular network, with its built-in edge fade. Pure decoration. */
+.ct-network { position:absolute; z-index:-1; pointer-events:none; right:230px; top:0; width:min(76%,700px); height:330px; background:var(--blue); opacity:.14; -webkit-mask:var(--hero-art) center / contain no-repeat; mask:var(--hero-art) center / contain no-repeat; }
+html[data-design='contemporary'][data-theme='dark'] .ct-network { opacity:.11; }
 .ct-lab-name { font-size:15px; color:var(--teal); margin-bottom:10px; font-weight:600; }
 .ct-intro h1 { font-size:39px; line-height:1.16; max-width:540px; letter-spacing:-.025em; text-wrap:balance; }
 .ct-intro-copy { margin-top:19px; max-width:640px; }
@@ -209,6 +212,7 @@ html[data-design='contemporary'][data-theme='dark'] {
   .ct-nav-row { border:0; }
   .ct-header .ct-search-link { margin-left:0; }
   .ct-intro { grid-template-columns:1fr; gap:30px; padding-top:28px; }
+  .ct-network { right:0; top:20px; width:min(100%,540px); height:260px; }
   .ct-intro h1 { max-width:540px; font-size:35px; }
   .ct-feature-figure { max-width:470px; }
   .ct-feature-figure img { max-height:220px; }

@@ -176,6 +176,9 @@ The default homepage and both existing ballots stay as they are.
 All content still comes from `content/lab.yml`; the template is
 `scripts/contemporary.mjs` and its styles are in `public/contemporary.css`.
 The preview is statically `noindex` and excluded from the canonical sitemap.
+The homepage reuses Atlas's subtle molecular network as a decorative background.
+It follows `home.hero_visual`; remove that YAML field to hide it. Light and dark
+mode use separate low opacities, with text contrast checked over the network.
 
 Design guardrails for future edits:
 

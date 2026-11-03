@@ -45,4 +45,10 @@ for(const [name,p]of palettes.filter(([name])=>name.startsWith('atlas'))){
   const background=blend(grid,p.paper,1-(1-opacity)**2);
   for(const foreground of ['ink','muted','teal','blue'])if(contrast(p[foreground],background)<4.5)failures.push(name+' text over decorative grid');
 }
+// Treat the network mask as fully opaque at its strongest point. The real SVG
+// is lighter; this checks the worst possible background behind homepage text.
+for(const [name,p]of palettes.filter(([name])=>name.startsWith('contemporary'))){
+  const background=blend(p.blue,p.paper,name.endsWith('dark')?.11:.14);
+  for(const foreground of ['ink','muted','teal','blue'])if(contrast(p[foreground],background)<4.5)failures.push(name+' text over decorative network');
+}
 if(failures.length){console.error(failures.join('\n'));process.exitCode=1;}else console.log('Palette text, control borders, and focus indicators meet the checked WCAG AA contrast thresholds. Browser and assistive-technology checks are still separate.');
